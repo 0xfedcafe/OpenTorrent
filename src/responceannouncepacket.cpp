@@ -23,7 +23,8 @@ ResponseAnnouncePacket::ResponseAnnouncePacket(
   buff_view.remove_prefix(4);
 
   if (transactionID_ != transactionID) {
-    Logger::get_instance()->Error("ResponseAnnouncePacket: Transaction ID mismatch");
+    Logger::get_instance()->Error(
+        "ResponseAnnouncePacket: Transaction ID mismatch");
     throw std::runtime_error{"ResponseAnnouncePacket: Transaction ID mismatch"};
   }
 
@@ -38,7 +39,7 @@ ResponseAnnouncePacket::ResponseAnnouncePacket(
 
   while (buff_view.size() >= 6) {
     auto to_return =
-        Peer{util::FromNetworkCharSequence<uint32_t>(buff_view.substr(0, 4)),
+        Peer{util::FromCharSequence<uint32_t>(buff_view.substr(0, 4)),
              util::FromNetworkCharSequence<uint16_t>(buff_view.substr(4, 2))};
     buff_view.remove_prefix(6);
     if (to_return.port || to_return.ip) {

@@ -37,7 +37,7 @@ AnnouncePacket::AnnouncePacket(int64_t connectionId,
   std::generate(std::begin(peerID_), std::end(peerID_),
                 [&distribution]() { return distribution(util::generator); });
   transactionID_ = distribution(util::generator);
-  util::Put(buffer_, connectionID_, action_, transactionID_, info_hash_,
+  util::Put(buffer_, connectionID_, action, transactionID_, info_hash_,
             peerID_, downloaded_, left_, uploaded_, event_, ip_address_, key_,
             num_want_, port_, extensions_);
 }

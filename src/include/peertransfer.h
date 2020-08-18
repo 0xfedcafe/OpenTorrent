@@ -9,6 +9,7 @@
 #include <peer.h>
 #include <peerhandshake.h>
 #include <torrentbasefileinfo.h>
+#include <udp/announcepacket.h>
 #include <udp/responseannouncepacket.h>
 #include <boost/asio.hpp>
 #include <iterator>
@@ -20,28 +21,45 @@ namespace cocktorrent::peer::tcp {
 class PeerTransfer {
  public:
   using IOContext = boost::asio::io_context;
+  using Ip = boost::asio::ip::tcp;
   using EndPoint = boost::asio::ip::tcp::endpoint;
   using Socket = boost::asio::ip::tcp::socket;
   using EndPoints = boost::asio::ip::tcp::resolver::results_type;
   using PeerSet = std::unordered_map<int, Peer>;
   using PeerArray = std::vector<Peer *>;
   using ErrorCode = boost::system::error_code;
+  using Acceptor = boost::asio::ip::tcp::acceptor;
   template <class It>
   using EnableIfPeerIt = std::enable_if<std::is_same_v<
       std::decay_t<typename std::iterator_traits<It>::value_type>,
       udp::ResponseAnnouncePacket::Peer>>;
 
-  PeerTransfer(IOContext &io_context, TorrentBaseFileInfo file_info);
+  PeerTransfer(IOContext &io_context, const TorrentBaseFileInfo &file_info);
 
   template <class PeerIt, typename = EnableIfPeerIt<PeerIt>>
   void Run(PeerIt b, PeerIt e) {
+    acceptor_.async_accept(
+        acceptor_sock_, [this](const boost::system::error_code &error) {
+          if (error) {
+            LOG_ERR("PeerTransfer: Error in accepting connection to " +
+                     std::to_string(acceptor_endpoint_.port()) +
+                    ". " + error.message());
+          } else {
+            LOG_INFO("PeerTransfer: Received connection from " +
+                     acceptor_sock_.remote_endpoint().address().to_string() +
+                     ":" +
+                     std::to_string(acceptor_sock_.remote_endpoint().port()));
+          }
+        });
     active_peers_.reserve(std::distance(b, e));
     std::for_each(b, e, [this](auto &&el) {
       this->AsyncConnect(FromRespAnnPeer(std::forward<decltype(el)>(el)));
     });
   }
 
-  [[nodiscard]] const PeerArray &active_peers() { return active_peers_; }
+  [[nodiscard]] const PeerArray &active_peers() noexcept {
+    return active_peers_;
+  }
 
  private:
   void Start() {
@@ -69,9 +87,11 @@ class PeerTransfer {
 
   TorrentBaseFileInfo file_info_;
   IOContext &io_context_;
-  int regular_unchoked_size_{};
   PeerSet peers_;
   PeerArray active_peers_;
+  EndPoint acceptor_endpoint_{Ip::v4(), udp::AnnouncePacket::default_port};
+  Acceptor acceptor_;
+  Socket acceptor_sock_;
 };
 // namespace cocktorrent::peer::tcp
 }  // namespace cocktorrent::peer::tcp

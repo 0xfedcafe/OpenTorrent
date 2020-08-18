@@ -19,6 +19,7 @@
 
 namespace cocktorrent::util {
 inline ::std::mt19937 generator{::std::random_device{}()};
+
 template <class T>
 using EnableIfIntegral =
     ::std::enable_if<::std::is_integral_v<::std::decay_t<T>>>;
@@ -92,15 +93,9 @@ template <class T, typename = EnableIfIntegral<T>>
   ::std::memcpy(chars.chars, &x, sizeof(T));
   return chars;
 }
-template <class T, typename = EnableIfIntegral<T>>
-T FromNetworkCharSequence(::cocktorrent::util::CharSequence<sizeof(T)> bytes) {
-  T value;
-  ::std::memcpy(&value, bytes.chars, sizeof(T));
-  return ::cocktorrent::util::NetworkToHost(value);
-}
 
 template <class T, typename = EnableIfIntegral<T>>
-T FromNetworkCharSequence(::std::string_view bytes) {
+T FromCharSequence(::std::string_view bytes) {
   using namespace std::literals;
   T value;
   if (bytes.size() != sizeof(T))
@@ -110,7 +105,20 @@ T FromNetworkCharSequence(::std::string_view bytes) {
                              "} in "
                              "FromNetworkCharSequence(std::string_view).");
   ::std::memcpy(&value, bytes.data(), sizeof(T));
+  return value;
+}
+
+template <class T, typename = EnableIfIntegral<T>>
+T FromNetworkCharSequence(::cocktorrent::util::CharSequence<sizeof(T)> bytes) {
+  T value;
+  ::std::memcpy(&value, bytes.chars, sizeof(T));
   return ::cocktorrent::util::NetworkToHost(value);
+}
+
+template <class T, typename = EnableIfIntegral<T>>
+T FromNetworkCharSequence(::std::string_view bytes) {
+  return ::cocktorrent::util::NetworkToHost(
+      ::cocktorrent::util::FromCharSequence<T>(bytes));
 }
 
 template <size_t size>
@@ -163,8 +171,8 @@ void Put(char *buf, ::std::array<char, N> &ar) {
 template <class... T>
 void Put(char *buf, T &&... els) {
   [[maybe_unused]] int dummy_arr[sizeof...(T)] = {
-      (::cocktorrent::util::Put(buf, ::std::forward<T>(els)),
-       buf += sizeof(T), 0)...};
+      (::cocktorrent::util::Put(buf, ::std::forward<T>(els)), buf += sizeof(T),
+       0)...};
 }
 
 inline void Get(const char *buf, std::size_t n, ::std::string_view &sv) {

@@ -1,4 +1,5 @@
 #include <peertransfer.h>
+#include <torrentsinglefileinfo.h>
 #include <udp/trackerconnection.h>
 #include <boost/asio.hpp>
 #include <ios>
@@ -32,7 +33,7 @@ TEST_CASE("Get peers", "[torrent][tracker]") {
     WARN("Error in getting udp points to " + s_file_s_info.announce() + " " +
          ec.message());
   }
-  auto an_list_it = s_file_s_info.announce_list().begin();
+  auto an_list_it = s_file_s_info.announce_list().begin() + 2;
   std::size_t peer_size{};
   while (endpoints.empty() &&
          an_list_it != s_file_s_info.announce_list().end()) {
@@ -48,28 +49,17 @@ TEST_CASE("Get peers", "[torrent][tracker]") {
 
   TrackerConnection tracker_connection{io_service, s_file_s_info};
 
-  TrackerConnection::DeadLineTimer deadline{io_service};
-  TrackerConnection::DeadLineTimer deadline1{io_service};
-  PeerTransfer peer_transfer{io_service, s_file_s_info};
-
   if (!endpoints.empty()) {
-    deadline.expires_from_now(boost::asio::chrono::seconds(120));
-    deadline.async_wait(
-        [&]([[maybe_unused]] const TrackerConnection::ErrorCode &ec) {
-          WARN(ec.message());
-          peer_size += tracker_connection.peers().size();
-          deadline1.expires_from_now(boost::asio::chrono::seconds(240));
-          deadline1.async_wait(
-              [&]([[maybe_unused]] const TrackerConnection::ErrorCode &ec) {
-                WARN(ec.message());
-              });
-          peer_transfer.Run(tracker_connection.peers().begin(),
-                            tracker_connection.peers().end());
-        });
     tracker_connection.Run(endpoints);
   }
 
   io_service.run();
-  REQUIRE(peer_size > 0);
-  REQUIRE(peer_transfer.active_peers().size() > 0);
+  boost::asio::io_context io_service2;
+  PeerTransfer peer_transfer{io_service2, s_file_s_info};
+  peer_size += tracker_connection.peers().size();
+  peer_transfer.Run(tracker_connection.peers().begin(),
+                    tracker_connection.peers().end());
+  io_service2.run();
+  REQUIRE(peer_size);
+  REQUIRE(peer_transfer.active_peers().size());
 }

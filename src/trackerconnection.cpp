@@ -4,7 +4,10 @@
 #include <logger.h>
 #include <udp/trackerconnection.h>
 #include <string>
-#define CURR_ADDRESS (iterator_->host_name() + ":" + iterator_->service_name())
+#define CURR_ADDRESS                                              \
+  (iterator_ != end_points_.end()                                 \
+       ? iterator_->host_name() + ":" + iterator_->service_name() \
+       : "")
 
 void cocktorrent::udp::TrackerConnection::ConnHandle(
     const cocktorrent::udp::TrackerConnection::ErrorCode& error_code) {
@@ -62,9 +65,11 @@ void cocktorrent::udp::TrackerConnection::TryNext() {
   time_out_ = TimeOut{15};
   if (iterator_ != end_points_.end()) {
     ++iterator_;
-    LOG_INFO("TrackerConnection: Next tracker.");
   }
-  Connect();
+  if (iterator_ != end_points_.end()) {
+    LOG_INFO("TrackerConnection: Next tracker.");
+    Connect();
+  }
 }
 
 void cocktorrent::udp::TrackerConnection::ConnRequestTimeOut(
@@ -92,7 +97,7 @@ void cocktorrent::udp::TrackerConnection::ConnPackHandle(
   if (error || bytes_transferred < 16) {
     LOG_ERR("TrackerConnection: Error in sending ConnectionPacket to " +
             CURR_ADDRESS + ". " + std::to_string(bytes_transferred) +
-            " bytes transferred.");
+            " bytes transferred. " + error.message());
     SendConnection();
   } else {
     ReceiveConnection(transaction_id);
@@ -216,12 +221,13 @@ void cocktorrent::udp::TrackerConnection::SendAnnHandler(
 }
 
 void cocktorrent::udp::TrackerConnection::SendAnnounce(int64_t conn_id) {
-  LOG_INFO("Start sending announce to " + CURR_ADDRESS + "...");
+  LOG_INFO("TrackerConnection: Start sending announce to " + CURR_ADDRESS +
+           "...");
   timer_.cancel();
   timer_.expires_after(time_out_);
   std::uniform_int_distribution<char> distribution;
   AnnouncePacket send_announce(conn_id, file_info_,
-                               socket_.local_endpoint().port());
+                               AnnouncePacket::default_port);
   send_ann_buf_ = send_announce.buffer();
   int32_t trans_id = send_announce.transactionID();
   socket_.async_send(boost::asio::buffer(send_ann_buf_),

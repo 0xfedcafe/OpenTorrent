@@ -12,7 +12,8 @@
 namespace cocktorrent::udp {
 class AnnouncePacket {
  public:
-  static constexpr int32_t action_ = 1;
+  static constexpr int32_t action = 1;
+  static constexpr uint16_t default_port = 6889;
 
   using BufferType = std::array<char, 100>;
   using InfoHashType = TorrentBaseFileInfo::InfoHashType;

@@ -15,9 +15,11 @@ class PeerHandshake {
   static constexpr char pstrlen = protocol_id.size();
   static constexpr int64_t reserved = 0;
 
-  using BufferType = std::array<char, 49 + protocol_id.size()>;
   using InfoHashType = std::array<char, 20>;
   using PeerIdType = std::array<char, 20>;
+  using BufferType =
+  std::array<char, sizeof(pstrlen) + pstrlen + sizeof(reserved) +
+                   sizeof(InfoHashType) +  sizeof(PeerIdType)>;
 
   PeerHandshake() = delete;
   explicit PeerHandshake(const InfoHashType &info_hash)
@@ -30,13 +32,13 @@ class PeerHandshake {
               info_hash_, peer_id_);
   }
 
-  [[nodiscard]] const BufferType &buffer() const { return buffer_; }
-  [[nodiscard]] const InfoHashType &info_hash() const { return info_hash_; }
-  [[nodiscard]] const PeerIdType &peer_id() { return peer_id_; }
+  [[nodiscard]] const BufferType &buffer() const noexcept { return buffer_; }
+  [[nodiscard]] const InfoHashType &info_hash() const noexcept { return info_hash_; }
+  [[nodiscard]] const PeerIdType &peer_id() noexcept { return peer_id_; }
 
  private:
   InfoHashType info_hash_;
-  PeerIdType peer_id_ = {{"-CK0001-"}};
+  PeerIdType peer_id_ = {{"-CK0001-12341243909"}};
   BufferType buffer_{};
 };
 }  // namespace cocktorrent::peer::tcp

@@ -23,15 +23,15 @@ class Peer {
 
   explicit Peer(IOContext &io_context) : socket_(io_context) {}
 
-  void SetChoked() { state_ |= PeerState::CHOCKED; }
+  void SetChoked() noexcept { state_ |= PeerState::CHOCKED; }
 
-  void SetInterested() { state_ |= PeerState::INTERESTED; }
+  void SetInterested() noexcept { state_ |= PeerState::INTERESTED; }
 
-  void UnsetChoked() { state_ &= ~PeerState::CHOCKED; }
+  void UnsetChoked() noexcept { state_ &= ~PeerState::CHOCKED; }
 
-  void UnsetInterested() { state_ &= ~PeerState::INTERESTED; }
+  void UnsetInterested() noexcept { state_ &= ~PeerState::INTERESTED; }
 
-  void upload(intmax_t uploaded) { upload_rate_ += uploaded; }
+  void upload(intmax_t uploaded) noexcept { upload_rate_ += uploaded; }
 
   template <class F>
   void HandShake(F &&callback, const InfoHashType &info_hash) {
@@ -39,25 +39,31 @@ class Peer {
     if (socket_.is_open()) SendHandshake(std::forward<F>(callback));
   }
 
-  [[nodiscard]] bool Interested() const {
+  [[nodiscard]] bool Interested() const noexcept {
     return state_ & PeerState::INTERESTED;
   }
 
-  [[nodiscard]] bool Choked() const { return state_ & PeerState::CHOCKED; }
+  [[nodiscard]] bool Choked() const noexcept {
+    return state_ & PeerState::CHOCKED;
+  }
 
-  [[nodiscard]] bool Unchoked() const { return !Choked(); }
+  [[nodiscard]] bool Unchoked() const noexcept { return !Choked(); }
 
-  [[nodiscard]] bool NotInterested() const { return !Interested(); }
+  [[nodiscard]] bool NotInterested() const noexcept { return !Interested(); }
 
-  [[nodiscard]] const auto &socket() const { return socket_; }
+  [[nodiscard]] const auto &socket() const noexcept { return socket_; }
 
-  [[nodiscard]] auto &socket() { return socket_; }
+  [[nodiscard]] auto &socket() noexcept { return socket_; }
 
-  [[nodiscard]] auto address() const {
+  [[nodiscard]] auto address() const noexcept {
     return socket_.remote_endpoint().address();
   }
 
-  [[nodiscard]] intmax_t upload_rate() const { return upload_rate_; }
+  [[nodiscard]] auto port() const noexcept {
+    return socket_.remote_endpoint().port();
+  }
+
+  [[nodiscard]] intmax_t upload_rate() const noexcept { return upload_rate_; }
 
  private:
   template <class F>
@@ -89,8 +95,8 @@ class Peer {
 
   template <class F>
   void ReceiveHandShake(F &&callback) {
-    boost::asio::async_read(
-        socket_, boost::asio::buffer(buff_),
+    socket_.async_receive(
+        boost::asio::buffer(buff_),
         [this, callback = std::forward<F>(callback)](
             const ErrorCode &error, std::size_t bytes_transferred) {
           this->ReceiveHandShakeHandle(callback, error, bytes_transferred);
@@ -101,8 +107,8 @@ class Peer {
   void ReceiveHandShakeHandle(F &&callback, const ErrorCode &error,
                               std::size_t bytes_transferred) {
     if (error) {
-      LOG_ERR("Peer: Error in receiving Handshake to " + address().to_string() +
-              " " + std::to_string(bytes_transferred) + " bytes received. " +
+      LOG_ERR("Peer: Error in receiving Handshake. " +
+              std::to_string(bytes_transferred) + " bytes received. " +
               error.message());
     } else {
       PeerHandshake received{buff_};

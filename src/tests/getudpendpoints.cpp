@@ -30,8 +30,9 @@ TEST_CASE("UDP", "[torrent][udp][resolver]") {
           auto vec = cocktorrent::util::GetUDPEndPoints(
               ec, file_info.announce(), io_service);
           if (ec) {
-            WARN("Error in getting udp points to " + file_info.announce() +
-                 " " + ec.message());
+            WARN(std::string("Error in getting udp points to ") +
+                 file.path().string() + " " + file_info.announce() + " " +
+                 ec.message());
           }
           INFO(file_info.announce());
           REQUIRE(!vec.empty());
@@ -42,8 +43,8 @@ TEST_CASE("UDP", "[torrent][udp][resolver]") {
             auto vec = cocktorrent::util::GetUDPEndPoints(
                 ec, std::forward<decltype(el)>(el), io_service);
             if (ec) {
-              WARN("Error in getting udp points to " +
-                   std::forward<decltype(el)>(el) + " " + ec.message());
+              WARN("Error in getting udp points to " + file.path().string() +
+                   " " + std::forward<decltype(el)>(el) + " " + ec.message());
             }
             INFO(std::forward<decltype(el)>(el));
             REQUIRE(!vec.empty());

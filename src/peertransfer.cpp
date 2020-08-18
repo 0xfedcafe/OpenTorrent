@@ -10,8 +10,12 @@
 #include <utility>
 
 cocktorrent::peer::tcp::PeerTransfer::PeerTransfer(
-    PeerTransfer::IOContext &io_context, TorrentBaseFileInfo file_info)
-    : file_info_{std::move(file_info)}, io_context_{io_context}, peers_{} {}
+    PeerTransfer::IOContext &io_context, const TorrentBaseFileInfo &file_info)
+    : file_info_{file_info},
+      io_context_{io_context},
+      peers_{},
+      acceptor_{io_context, acceptor_endpoint_},
+      acceptor_sock_{io_context} {}
 
 cocktorrent::peer::tcp::PeerTransfer::EndPoint
 cocktorrent::peer::tcp::PeerTransfer::FromRespAnnPeer(
@@ -32,15 +36,15 @@ void cocktorrent::peer::tcp::PeerTransfer::AsyncConnectHandle(
     const cocktorrent::peer::tcp::PeerTransfer::ErrorCode &ec, int peer_id,
     cocktorrent::peer::tcp::Peer &peer) {
   if (ec) {
-    LOG_ERR("PeerTransfer: Error in connecting. peer_id: " +
-            std::to_string(peer_id));
+    LOG_ERR("PeerTransfer: Error in connecting. " + ec.message() +
+            " peer_id: " + std::to_string(peer_id));
     peers_.erase(peer_id);
   } else {
     LOG_INFO("PeerTransfer: Peer connected to " + peer.address().to_string());
     peer.HandShake(
         [this, &peer] {
           this->active_peers_.push_back(&peer);
-          if (this->regular_unchoked_size_ == 3) {
+          if (this->active_peers_.size() == 3) {
             this->Start();
           }
         },
@@ -51,13 +55,14 @@ void cocktorrent::peer::tcp::PeerTransfer::AsyncConnectHandle(
 void cocktorrent::peer::tcp::PeerTransfer::AsyncConnect(
     const cocktorrent::peer::tcp::PeerTransfer::EndPoint &end_point) {
   LOG_INFO("PeerTransfer: Start connecting peer to " +
-           end_point.address().to_string());
+           end_point.address().to_string() + ":" +
+           std::to_string(end_point.port()));
   std::uniform_int_distribution<int> distribution{};
   auto [it, f] = peers_.emplace(
       std::make_pair(distribution(util::generator), Peer{io_context_}));
   if (f) {
-    LOG_INFO("PeerTransfer: Peer inserted.");
     auto it_c = it;
+    LOG_INFO("PeerTransfer: Peer inserted. " + std::to_string(it_c->first));
     it->second.socket().async_connect(
         end_point, [this, it_c](const ErrorCode &ec) {
           this->AsyncConnectHandle(ec, it_c->first, it_c->second);
