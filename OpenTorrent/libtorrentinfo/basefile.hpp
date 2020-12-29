@@ -28,29 +28,19 @@ class BaseFile {
 
   explicit BaseFile(BencodeElement const &el);
 
-  [[nodiscard]] const String &announce() const {
-    return announce_;
-  }
+  [[nodiscard]] const String &announce() const { return announce_; }
 
   [[nodiscard]] const AnnounceList &announce_list() const {
     return announce_list_;
   }
 
-  [[nodiscard]] const String &pieces() const {
-    return pieces_;
-  }
+  [[nodiscard]] const String &pieces() const { return pieces_; }
 
-  [[nodiscard]] const String &name() const {
-    return name_;
-  }
+  [[nodiscard]] const String &name() const { return name_; }
 
-  [[nodiscard]] const InfoHashType &info_hash() const {
-    return info_hash_;
-  }
+  [[nodiscard]] const InfoHashType &info_hash() const { return info_hash_; }
 
-  [[nodiscard]] Integer piece_length() const {
-    return piece_length_;
-  }
+  [[nodiscard]] Integer piece_length() const { return piece_length_; }
 
  private:
   String announce_{};

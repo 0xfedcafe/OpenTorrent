@@ -209,15 +209,9 @@ void opentorrent::udp::Connection::SendAnnounce(int64_t conn_id) {
   Logger::get_instance()->Info("Start sending announce...");
   timer_.cancel();
   timer_.expires_after(time_out_);
-  std::array<char, 20> generated{};
-  std::uniform_int_distribution<char> distribution;
-  std::generate(generated.begin(), generated.end(), [&distribution]() {
-    return distribution(details::utils::generator);
-  });
   std::uniform_int_distribution<uint32_t> distribution2;
-  packets::udp::Announce send_announce(
-      conn_id, info_hash_, generated, 0, 0, 0, 2, 0,
-      distribution2(details::utils::generator), -1, 1337, 0);
+  packets::udp::Announce send_announce(conn_id, info_hash_, 0, 0, 0, 2, 0, -1,
+                                       1337, 0);
   send_ann_buf_ = send_announce.buffer();
   int32_t trans_id = send_announce.transactionID();
   socket_.async_send(boost::asio::buffer(send_ann_buf_),

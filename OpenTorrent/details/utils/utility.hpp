@@ -17,7 +17,6 @@
 #include <vector>
 
 namespace details::utils {
-inline ::std::mt19937 generator{::std::random_device{}()};
 template <class T>
 using EnableIfIntegral =
     ::std::enable_if<::std::is_integral_v<::std::decay_t<T>>>;
@@ -26,6 +25,16 @@ inline auto CurrentDate() {
   auto time = ::std::chrono::system_clock::now();
   auto tm = ::std::chrono::system_clock::to_time_t(time);
   return ::std::put_time(::std::localtime(&tm), "%Y-%m-%d %H:%M:%S");
+}
+
+namespace details {
+inline ::std::mt19937 generator{::std::random_device{}()};
+}
+
+template <class T, typename = EnableIfIntegral<T>>
+T random() {
+  std::uniform_int_distribution<T> distribution;
+  return distribution(details::generator);
 }
 
 template <class T, class InputIt>
@@ -95,7 +104,7 @@ void Put(char *buf, ::std::array<char, N> ar) {
 }
 
 template <class... T>
-void Put(char *buf, T &&... els) {
+void Put(char *buf, T &&...els) {
   [[maybe_unused]] int dummy_arr[sizeof...(T)] = {
       (::details::utils::detail::Put(buf, ::std::forward<T>(els)),
        buf += sizeof(T), 0)...};
@@ -104,12 +113,12 @@ void Put(char *buf, T &&... els) {
 
 template <class... T, size_t N>
 void Put([[maybe_unused]] ::std::array<char, N> &buf,
-         [[maybe_unused]] T &&... els) {
+         [[maybe_unused]] T &&...els) {
   constexpr size_t all_size = (sizeof(T) + ...);
   static_assert(N == all_size, "Array size mismatch.");
   ::details::utils::detail::Put(buf.data(), std::forward<T>(els)...);
 }
 
-}  // namespace opentorrent::util
+}  // namespace details::utils
 
 #endif  // UTILITIES_H

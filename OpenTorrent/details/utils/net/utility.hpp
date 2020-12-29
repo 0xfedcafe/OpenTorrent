@@ -5,8 +5,10 @@
 #ifndef OPENTORRENT_UTILITY_HPP
 #define OPENTORRENT_UTILITY_HPP
 #include <boost/asio.hpp>
+#include <details/utils/utility.hpp>
+#include <random>
 
-namespace details::utils::boost {
+namespace details::utils::net {
 
 inline bool IsUdp(::std::string_view url) { return url.find("udp://") == 0; }
 
@@ -30,6 +32,8 @@ inline ::boost::asio::ip::udp::resolver::results_type GetUDPEndPoints(
 
   return resolver.resolve(domain, port);
 }
-}
+
+inline int32_t TransactionID() { return ::details::utils::random<int32_t>(); }
+}  // namespace details::utils::net
 
 #endif  // OPENTORRENT_UTILITY_HPP

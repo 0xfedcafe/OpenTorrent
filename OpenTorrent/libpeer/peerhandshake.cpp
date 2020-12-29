@@ -8,10 +8,7 @@
 namespace opentorrent::peer::tcp {
 PeerHandshake::PeerHandshake(const std::array<char, 20> &info_hash)
     : info_hash_(info_hash) {
-  std::uniform_int_distribution<char> rand('0', '9');
-  std::generate(peer_id_.begin() + 8, peer_id_.end(),
-                [&rand]() { return rand(details::utils::generator); });
-
-//  util::Put(buffer_, pstrlen, protocol_id, reserved, info_hash_, peer_id_);
+  std::generate(peer_id_.begin() + 8,
+                peer_id_.end(), []() { return 0; });
 }
-}  // namespace cocktorrent::peer::tcp
+}  // namespace opentorrent::peer::tcp

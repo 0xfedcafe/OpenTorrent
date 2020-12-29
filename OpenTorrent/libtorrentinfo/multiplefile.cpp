@@ -4,18 +4,14 @@
 
 #include <libtorrentinfo/multiplefile.hpp>
 namespace opentorrent {
-MultipleFile::MultipleFile(
-    const MultipleFile::BencodeElement &el)
+MultipleFile::MultipleFile(const MultipleFile::BencodeElement &el)
     : BaseFile(el),
       files_{adapt(&el)["info"]["files"].list().cbegin(),
              adapt(&el)["info"]["files"].list().cend()} {}
 
-const MultipleFile::List &MultipleFile::files() const {
-  return files_;
-}
+const MultipleFile::List &MultipleFile::files() const { return files_; }
 
-MultipleFile::File::File(
-    const MultipleFile::BencodeElement &dict)
+MultipleFile::File::File(const MultipleFile::BencodeElement &dict)
     : length(adapt(&dict)["length"].integer()),
       path(ListFromBencode(adapt(&dict)["path"].list())) {}
 
@@ -56,6 +52,6 @@ MultipleFile::File::List MultipleFile::File::ListFromBencode(
     BencodeAdapter::ListType::const_iterator iterator_;
   };
   return MultipleFile::File::List{LasyIterator{el.cbegin()},
-                                             LasyIterator{el.cend()}};
+                                  LasyIterator{el.cend()}};
 }
-}  // namespace cocktorrent
+}  // namespace opentorrent

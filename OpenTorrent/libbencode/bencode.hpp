@@ -20,12 +20,13 @@ struct BencodeElement {
   std::variant<BencodeInt, BencodeString, BencodeDictionary, BencodeList> data;
 };
 
-constexpr bool operator==(const BencodeElement &lhs, const BencodeElement &rhs) {
+constexpr bool operator==(const BencodeElement &lhs,
+                          const BencodeElement &rhs) {
   return lhs.data == rhs.data;
 }
 
 BencodeElement Decode(std::string_view);
-std::string Encode(const BencodeElement&);
+std::string Encode(const BencodeElement &);
 }  // namespace opentorrent::bencode
 
 #endif  // BENCODE_H

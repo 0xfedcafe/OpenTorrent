@@ -9,8 +9,7 @@
 #include <variant>
 
 namespace opentorrent {
-BaseFile::BaseFile(
-    const BaseFile::BencodeElement &el)
+BaseFile::BaseFile(const BaseFile::BencodeElement &el)
     : announce_(adapt(&el)["announce"].string()),
       pieces_(adapt(&el)["info"]["pieces"].string()),
       name_(adapt(&el)["info"]["name"].string()),
@@ -33,13 +32,12 @@ BaseFile::BaseFile(
   std::for_each(list->begin(), list->end(), [&](auto &&el) {
     auto sublist = std::get_if<bencode::BencodeList>(&el.data);
     if (sublist == nullptr) {
-        return;
+      return;
     }
     std::for_each(sublist->begin(), sublist->end(), [&](auto &&el) {
       if (auto &&el_str = std::get_if<bencode::BencodeString>(&el.data))
-        announce_list_.push_back(
-          std::forward<decltype(*el_str)>(*el_str));
+        announce_list_.push_back(std::forward<decltype(*el_str)>(*el_str));
     });
   });
 }
-}  // namespace cocktorrent
+}  // namespace opentorrent

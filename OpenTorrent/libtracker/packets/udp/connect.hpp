@@ -13,8 +13,6 @@ class Connect {
   using BufferType = std::array<char, 16>;
 
   Connect();
-  static int64_t connectionID();
-  static int32_t actionID();
   [[nodiscard]] int32_t transactionID() const;
   [[nodiscard]] const BufferType& buffer() const;
 
@@ -24,5 +22,5 @@ class Connect {
   int32_t transactionID_{};
   BufferType buffer_{};
 };
-}  // namespace opentorrent::udp
+}  // namespace opentorrent::packets::udp
 #endif  // OPENTORRENT_CONNECT_H

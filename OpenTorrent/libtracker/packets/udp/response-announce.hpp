@@ -14,21 +14,11 @@ class ResponseAnnounce {
  public:
   ResponseAnnounce() = delete;
   ResponseAnnounce(const boost::asio::const_buffer& buffer,
-                         int32_t transactionID);
+                   int32_t transactionID);
   struct Seed {
     uint32_t ip;
     uint16_t port;
   };
-
-  [[nodiscard]] int32_t action() const;
-
-  [[nodiscard]] int32_t transactionId() const;
-
-  [[nodiscard]] int32_t interval() const;
-
-  [[nodiscard]] int32_t leechers() const;
-
-  [[nodiscard]] int32_t seeders() const;
 
   [[nodiscard]] const std::vector<Seed>& peers() const;
 
@@ -40,5 +30,5 @@ class ResponseAnnounce {
   int32_t seeders_{};
   std::vector<Seed> peers_;
 };
-}  // namespace opentorrent::udp
+}  // namespace opentorrent::packets::udp
 #endif  // OPENTORRENT_RESPONSE_ANNOUNCE_H

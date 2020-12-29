@@ -26,15 +26,15 @@ TEST_CASE("UDP", "[torrent][udp][resolver]") {
         auto decoded = opentorrent::bencode::Decode(bencode_str);
         opentorrent::BaseFile file_info{decoded};
         if (file_info.announce().find("udp://") == 0) {
-          auto vec = details::utils::boost::GetUDPEndPoints(file_info.announce(),
-                                                        io_service);
+          auto vec = details::utils::net::GetUDPEndPoints(file_info.announce(),
+                                                          io_service);
           INFO(file_info.announce());
           REQUIRE(!vec.empty());
         }
         auto&& ann_list = file_info.announce_list();
         std::for_each(ann_list.begin(), ann_list.end(), [&](auto&& el) {
           if (std::forward<decltype(el)>(el).find("udp://") == 0) {
-            auto vec = details::utils::boost::GetUDPEndPoints(
+            auto vec = details::utils::net::GetUDPEndPoints(
                 std::forward<decltype(el)>(el), io_service);
             INFO(std::forward<decltype(el)>(el));
             REQUIRE(!vec.empty());

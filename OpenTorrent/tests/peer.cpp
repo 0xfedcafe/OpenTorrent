@@ -22,14 +22,13 @@ TEST_CASE("Get peers", "[torrent][tracker]") {
   input_file.close();
   boost::asio::io_service io_service;
   boost::asio::ip::udp::socket socket_{io_service};
-  auto endpoints = details::utils::boost::GetUDPEndPoints(
+  auto endpoints = details::utils::net::GetUDPEndPoints(
       s_file_s_info.announce(), io_service);
   auto an_list_it = s_file_s_info.announce_list().begin();
   std::size_t peer_size{};
   while (an_list_it + 1 != s_file_s_info.announce_list().end()) {
-    if (details::utils::boost::IsUdp(*an_list_it))
-      endpoints =
-          details::utils::boost::GetUDPEndPoints(*an_list_it, io_service);
+    if (details::utils::net::IsUdp(*an_list_it))
+      endpoints = details::utils::net::GetUDPEndPoints(*an_list_it, io_service);
     ++an_list_it;
 
     if (!endpoints.empty()) {

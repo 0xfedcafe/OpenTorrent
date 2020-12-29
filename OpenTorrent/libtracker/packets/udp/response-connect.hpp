@@ -11,8 +11,6 @@ namespace opentorrent::packets::udp {
 class ResponseConnect {
  public:
   ResponseConnect(const boost::asio::const_buffer &buf, int32_t transactionID);
-  [[nodiscard]] int32_t action() const;
-  [[nodiscard]] int32_t transactionID() const;
   [[nodiscard]] int64_t connectionID() const;
 
  private:
@@ -20,6 +18,6 @@ class ResponseConnect {
   int32_t transactionID_{};
   int64_t connectionID_{};
 };
-}  // namespace opentorrent::udp
+}  // namespace opentorrent::packets::udp
 
 #endif  // OPENTORRENT_RESPONSE_CONNECT_H

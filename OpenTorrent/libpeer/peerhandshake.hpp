@@ -28,6 +28,6 @@ class PeerHandshake {
   std::array<char, 20> peer_id_ = {{"-CK0001-"}};
   boost::asio::streambuf buffer_;
 };
-}  // namespace cocktorrent::peer::tcp
+}  // namespace opentorrent::peer::tcp
 
 #endif  // OPENTORRENT_PEERHANDSHAKE_H

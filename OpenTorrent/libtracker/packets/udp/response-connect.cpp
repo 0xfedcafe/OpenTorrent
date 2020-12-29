@@ -8,14 +8,13 @@
 
 namespace opentorrent::packets::udp {
 
-int32_t ResponseConnect::action() const { return action_; }
-int32_t ResponseConnect::transactionID() const { return transactionID_; }
 int64_t ResponseConnect::connectionID() const { return connectionID_; }
-ResponseConnect::ResponseConnect(
-    const boost::asio::const_buffer& buf, int32_t transactionID) {
+ResponseConnect::ResponseConnect(const boost::asio::const_buffer& buf,
+                                 int32_t transactionID) {
   std::string_view data{static_cast<const char*>(buf.data()), buf.size()};
 
-  this->action_ = details::utils::FromNetworkCharSequence<int32_t>(data.substr(0, 4));
+  this->action_ =
+      details::utils::FromNetworkCharSequence<int32_t>(data.substr(0, 4));
 
   data.remove_prefix(4);
 
@@ -28,10 +27,9 @@ ResponseConnect::ResponseConnect(
       details::utils::FromNetworkCharSequence<int64_t>(data.substr(0, 8));
 
   if (transactionID_ != transactionID) {
-    Logger::get_instance()->Error(
-        "ResponseConnect: TransactionID mismatch " +
-        std::to_string(transactionID) + " vs " +
-        std::to_string(transactionID_));
+    Logger::get_instance()->Error("ResponseConnect: TransactionID mismatch " +
+                                  std::to_string(transactionID) + " vs " +
+                                  std::to_string(transactionID_));
     throw std::logic_error{"ResponseConnect: TransactionID mismatch " +
                            std::to_string(transactionID) + " vs " +
                            std::to_string(transactionID_)};
@@ -45,4 +43,4 @@ ResponseConnect::ResponseConnect(
                            std::to_string(action_)};
   }
 }
-}  // namespace cocktorrent::udp
+}  // namespace opentorrent::packets::udp

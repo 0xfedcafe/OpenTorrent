@@ -16,35 +16,11 @@ class Announce {
   using BufferType = std::array<char, 100>;
 
   Announce(int64_t connectionId, std::array<char, 20> infoHash,
-           std::array<char, 20> peerId, int64_t downloaded, int64_t left,
-           int64_t uploaded, int32_t event, uint32_t ipAddress, uint32_t key,
-           int32_t numWant, uint16_t port, uint16_t extensions);
-
-  [[nodiscard]] int64_t connectionID() const;
+           int64_t downloaded, int64_t left, int64_t uploaded, int32_t event,
+           uint32_t ipAddress, int32_t numWant, uint16_t port,
+           uint16_t extensions);
 
   [[nodiscard]] int32_t transactionID() const;
-
-  [[nodiscard]] const std::array<char, 20> &infoHash() const;
-
-  [[nodiscard]] const std::array<char, 20> &peerID() const;
-
-  [[nodiscard]] int64_t downloaded() const;
-
-  [[nodiscard]] int64_t left() const;
-
-  [[nodiscard]] int64_t uploaded() const;
-
-  [[nodiscard]] int32_t event() const;
-
-  [[nodiscard]] uint32_t ipAddress() const;
-
-  [[nodiscard]] uint32_t key() const;
-
-  [[nodiscard]] int32_t numWant() const;
-
-  [[nodiscard]] uint16_t port() const;
-
-  [[nodiscard]] uint16_t extensions() const;
 
   [[nodiscard]] const BufferType &buffer() const;
 
@@ -52,7 +28,7 @@ class Announce {
   int64_t connectionID_;
   int32_t transactionID_;
   std::array<char, 20> infoHash_;
-  std::array<char, 20> peerID_;
+  std::array<char, 20> peerID_{};
   int64_t downloaded_;
   int64_t left_;
   int64_t uploaded_;
