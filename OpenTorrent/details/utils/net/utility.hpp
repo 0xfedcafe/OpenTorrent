@@ -10,9 +10,9 @@
 
 namespace details::utils::net {
 
-inline bool IsUdp(::std::string_view url) { return url.find("udp://") == 0; }
+[[nodiscard]] inline bool IsUdp(::std::string_view url) { return url.find("udp://") == 0; }
 
-inline ::boost::asio::ip::udp::resolver::results_type GetUDPEndPoints(
+[[nodiscard]] inline ::boost::asio::ip::udp::resolver::results_type GetUDPEndPoints(
     ::std::string_view url, ::boost::asio::io_context &io_context) {
   std::string_view domain;
   std::string_view port;
@@ -33,7 +33,7 @@ inline ::boost::asio::ip::udp::resolver::results_type GetUDPEndPoints(
   return resolver.resolve(domain, port);
 }
 
-inline int32_t TransactionID() { return ::details::utils::random<int32_t>(); }
+[[nodiscard]] inline int32_t TransactionID() { return ::details::utils::random<int32_t>(); }
 }  // namespace details::utils::net
 
 #endif  // OPENTORRENT_UTILITY_HPP

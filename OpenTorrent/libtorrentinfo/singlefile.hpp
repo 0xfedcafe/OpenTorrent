@@ -10,11 +10,6 @@
 #include <libtorrentinfo/basefile.hpp>
 
 namespace opentorrent {
-/**
- * @class SingleFile
- * @brief Класс для хранения инфы в случае одного файлов
- * @author https://github.com/s3ponia
- */
 class SingleFile : public BaseFile {
  public:
   using Dictionary = BaseFile::Dictionary;
@@ -27,7 +22,7 @@ class SingleFile : public BaseFile {
 
   explicit SingleFile(BencodeElement const &el);
 
-  Integer length() const;
+  [[nodiscard]] Integer length() const;
 
  private:
   Integer length_{};

@@ -11,11 +11,6 @@
 #include <vector>
 
 namespace opentorrent {
-/**
- * @class MultipleFile
- * @brief Класс для хранения инфы в случае нескольких файлов
- * @author https://github.com/s3ponia
- */
 class MultipleFile : public BaseFile {
  public:
   struct File;

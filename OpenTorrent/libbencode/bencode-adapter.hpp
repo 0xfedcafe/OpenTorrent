@@ -29,35 +29,35 @@ class BencodeElementAdapter {
   BencodeElementAdapter(const BencodeElementAdapter &) = delete;
   BencodeElementAdapter &operator=(BencodeElementAdapter &) = delete;
 
-  BencodeElementAdapter operator[](const StringType &s);
+  [[nodiscard]] BencodeElementAdapter operator[](const StringType &s);
 
-  BencodeElementAdapter operator[](const StringType &s) const;
+  [[nodiscard]] BencodeElementAdapter operator[](const StringType &s) const;
 
-  BencodeElementAdapter operator[](SizeType index);
+  [[nodiscard]] BencodeElementAdapter operator[](SizeType index);
 
-  BencodeElementAdapter operator[](SizeType index) const;
+  [[nodiscard]] BencodeElementAdapter operator[](SizeType index) const;
 
   [[nodiscard]] bool Contains(const StringType &s) const;
 
-  auto &integer();
+  [[nodiscard]] auto &integer();
 
-  const auto &integer() const;
+  [[nodiscard]] const auto &integer() const;
 
-  auto &string();
+  [[nodiscard]] auto &string();
 
-  const auto &string() const;
+  [[nodiscard]] const auto &string() const;
 
-  auto &list();
+  [[nodiscard]] auto &list();
 
-  const auto &list() const;
+  [[nodiscard]] const auto &list() const;
 
-  auto &dictionary();
+  [[nodiscard]] auto &dictionary();
 
-  const auto &dictionary() const;
+  [[nodiscard]] const auto &dictionary() const;
 
-  ElementType *element();
+  [[nodiscard]] ElementType *element();
 
-  ElementType *element() const;
+  [[nodiscard]] ElementType *element() const;
 
  private:
   explicit BencodeElementAdapter(ElementType *element);
@@ -67,7 +67,7 @@ class BencodeElementAdapter {
 };
 
 template <class T>
-auto adapt(T *element) {
+[[nodiscard]] auto adapt(T *element) {
   return BencodeElementAdapter{element};
 }
 

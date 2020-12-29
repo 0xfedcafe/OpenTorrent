@@ -9,11 +9,6 @@
 #include <vector>
 
 namespace opentorrent {
-/**
- * @class BaseFile
- * @brief Класс с общей инфой для торрент файлов
- * @author https://github.com/s3ponia
- */
 class BaseFile {
  public:
   using Dictionary = bencode::BencodeDictionary;

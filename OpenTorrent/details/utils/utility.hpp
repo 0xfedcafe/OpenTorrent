@@ -21,7 +21,7 @@ template <class T>
 using EnableIfIntegral =
     ::std::enable_if<::std::is_integral_v<::std::decay_t<T>>>;
 
-inline auto CurrentDate() {
+[[nodiscard]] inline auto CurrentDate() {
   auto time = ::std::chrono::system_clock::now();
   auto tm = ::std::chrono::system_clock::to_time_t(time);
   return ::std::put_time(::std::localtime(&tm), "%Y-%m-%d %H:%M:%S");
@@ -32,18 +32,18 @@ inline ::std::mt19937 generator{::std::random_device{}()};
 }
 
 template <class T, typename = EnableIfIntegral<T>>
-T random() {
+[[nodiscard]] T random() {
   std::uniform_int_distribution<T> distribution;
   return distribution(details::generator);
 }
 
 template <class T, class InputIt>
-::std::vector<T> ToVector(InputIt b, InputIt e) {
+[[nodiscard]] ::std::vector<T> ToVector(InputIt b, InputIt e) {
   return ::std::vector<T>{b, e};
 }
 
 template <class T, class Cont>
-::std::vector<T> ToVector(Cont &&c) {
+[[nodiscard]] ::std::vector<T> ToVector(Cont &&c) {
   auto b = ::std::begin(::std::forward<Cont>(c));
   auto e = ::std::begin(::std::forward<Cont>(c));
   return ::details::utils::ToVector<T>(b, e);
@@ -55,17 +55,17 @@ struct CharSequence {
 };
 
 template <class T, typename = EnableIfIntegral<T>>
-T HostToNetwork(T x) noexcept {
+[[nodiscard]] T HostToNetwork(T x) noexcept {
   return ::boost::endian::native_to_big(x);
 }
 
 template <class T, typename = EnableIfIntegral<T>>
-T NetworkToHost(T x) noexcept {
+[[nodiscard]] T NetworkToHost(T x) noexcept {
   return ::boost::endian::big_to_native(x);
 }
 
 template <class T, typename = EnableIfIntegral<T>>
-::details::utils::CharSequence<sizeof(T)> ToNetworkCharSequence(T x) {
+[[nodiscard]] ::details::utils::CharSequence<sizeof(T)> ToNetworkCharSequence(T x) {
   ::details::utils::CharSequence<sizeof(T)> chars;
   x = ::details::utils::HostToNetwork(x);
   ::std::memcpy(chars.chars, &x, sizeof(T));
@@ -73,7 +73,7 @@ template <class T, typename = EnableIfIntegral<T>>
 }
 
 template <class T, typename = EnableIfIntegral<T>>
-T FromNetworkCharSequence(::std::string_view bytes) {
+[[nodiscard]] T FromNetworkCharSequence(::std::string_view bytes) {
   using namespace std::literals;
   T value;
   if (bytes.size() != sizeof(T))
