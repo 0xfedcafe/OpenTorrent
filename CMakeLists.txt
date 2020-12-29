@@ -11,10 +11,20 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-include_directories(src/include)
+include_directories(OpenTorrent)
 
-file(GLOB SOURCES "src/*.cpp")
-add_executable(${PROJECT_NAME} "src/main_file/main.cpp" ${SOURCES} src/include/udp/trackerconnection.h)
+set(SOURCES OpenTorrent/libbencode/bencode.cpp
+            OpenTorrent/liblogger/logger.cpp
+            OpenTorrent/libpeer/peerhandshake.cpp
+        OpenTorrent/libtorrentinfo/basefile.cpp
+        OpenTorrent/libtorrentinfo/multiplefile.cpp
+        OpenTorrent/libtorrentinfo/singlefile.cpp
+            OpenTorrent/libtracker/connection.cpp
+        OpenTorrent/libtracker/packets/udp/announce.cpp
+        OpenTorrent/libtracker/packets/udp/connect.cpp
+        OpenTorrent/libtracker/packets/udp/response-announce.cpp
+        OpenTorrent/libtracker/packets/udp/response-connect.cpp)
+add_executable(${PROJECT_NAME} "OpenTorrent/open-torrent/main.cpp" ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 
 set_target_properties(${PROJECT_NAME}
@@ -25,8 +35,11 @@ set_target_properties(${PROJECT_NAME}
 
 
 # Unit testing
-file(GLOB TEST_SOURCES "src/tests/*.cpp")
-add_executable(tests ${TEST_SOURCES} ${SOURCES} src/trackerconnection.cpp)
+file(GLOB TEST_SOURCES "OpenTorrent/tests/*.cpp")
+set(TEST_SOURCES OpenTorrent/tests/bencode.cpp
+                 OpenTorrent/tests/getudpendpoints.cpp
+                 OpenTorrent/tests/peer.cpp)
+add_executable(tests ${TEST_SOURCES} OpenTorrent/tests/main.cpp ${SOURCES})
 target_compile_definitions(tests PUBLIC
   TEST_TORRENT_FILES_PATH=${PROJECT_SOURCE_DIR}/test-torrent-files)
 target_link_libraries(tests ${CONAN_LIBS})
