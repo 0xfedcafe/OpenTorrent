@@ -4,7 +4,7 @@
 #include <ios>
 #include <iostream>
 #include <string>
-#include "../third-party/include/catch.hpp"
+#include <catch2/catch.hpp>
 #include "bencode.h"
 #include "logger.h"
 #include "torrentmultiplefileinfo.h"

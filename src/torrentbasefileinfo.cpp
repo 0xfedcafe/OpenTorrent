@@ -31,7 +31,7 @@ TorrentBaseFileInfo::TorrentBaseFileInfo(
     return;
   }
   std::for_each(list->begin(), list->end(), [&](auto &&el) {
-    auto sublist = std::get_if<bencode::BencodeList>(&el.data)
+    auto sublist = std::get_if<bencode::BencodeList>(&el.data);
     if (sublist == nullptr) {
         return;
     }

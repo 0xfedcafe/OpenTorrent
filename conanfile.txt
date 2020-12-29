@@ -1,0 +1,7 @@
+[requires]
+boost/1.75.0
+catch2/2.13.3
+openssl/1.1.1i
+
+[generators]
+cmake
