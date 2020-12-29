@@ -2,8 +2,8 @@
 // Created by prise on 6/28/20.
 //
 
-#ifndef COCKTORRENT_RESPONSE_CONNECT_H
-#define COCKTORRENT_RESPONSE_CONNECT_H
+#ifndef OPENTORRENT_RESPONSE_CONNECT_H
+#define OPENTORRENT_RESPONSE_CONNECT_H
 #include <boost/asio.hpp>
 #include <cinttypes>
 
@@ -22,4 +22,4 @@ class ResponseConnect {
 };
 }  // namespace opentorrent::udp
 
-#endif  // COCKTORRENT_RESPONSE_CONNECT_H
+#endif  // OPENTORRENT_RESPONSE_CONNECT_H

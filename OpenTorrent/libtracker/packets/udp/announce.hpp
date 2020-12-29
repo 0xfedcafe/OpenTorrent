@@ -2,11 +2,11 @@
 // Created by prise on 6/28/20.
 //
 
-#ifndef COCKTORRENT_ANNOUNCE_H
-#define COCKTORRENT_ANNOUNCE_H
-#include <libtracker/packets/udp/response-connect.h>
+#ifndef OPENTORRENT_ANNOUNCE_H
+#define OPENTORRENT_ANNOUNCE_H
 #include <boost/asio.hpp>
 #include <cinttypes>
+#include <libtracker/packets/udp/response-connect.hpp>
 
 namespace opentorrent::packets::udp {
 class Announce {
@@ -16,10 +16,9 @@ class Announce {
   using BufferType = std::array<char, 100>;
 
   Announce(int64_t connectionId, std::array<char, 20> infoHash,
-                 std::array<char, 20> peerId, int64_t downloaded, int64_t left,
-                 int64_t uploaded, int32_t event, uint32_t ipAddress,
-                 uint32_t key, int32_t numWant, uint16_t port,
-                 uint16_t extensions);
+           std::array<char, 20> peerId, int64_t downloaded, int64_t left,
+           int64_t uploaded, int32_t event, uint32_t ipAddress, uint32_t key,
+           int32_t numWant, uint16_t port, uint16_t extensions);
 
   [[nodiscard]] int64_t connectionID() const;
 
@@ -65,5 +64,5 @@ class Announce {
   uint16_t extensions_;
   BufferType buffer_{};
 };
-}  // namespace opentorrent::udp
-#endif  // COCKTORRENT_ANNOUNCE_H
+}  // namespace opentorrent::packets::udp
+#endif  // OPENTORRENT_ANNOUNCE_H

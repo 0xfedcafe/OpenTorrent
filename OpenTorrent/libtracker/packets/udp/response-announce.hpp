@@ -2,8 +2,8 @@
 // Created by prise on 6/28/20.
 //
 
-#ifndef COCKTORRENT_RESPONSE_ANNOUNCE_H
-#define COCKTORRENT_RESPONSE_ANNOUNCE_H
+#ifndef OPENTORRENT_RESPONSE_ANNOUNCE_H
+#define OPENTORRENT_RESPONSE_ANNOUNCE_H
 
 #include <boost/asio.hpp>
 #include <cinttypes>
@@ -41,4 +41,4 @@ class ResponseAnnounce {
   std::vector<Seed> peers_;
 };
 }  // namespace opentorrent::udp
-#endif  // COCKTORRENT_RESPONSE_ANNOUNCE_H
+#endif  // OPENTORRENT_RESPONSE_ANNOUNCE_H

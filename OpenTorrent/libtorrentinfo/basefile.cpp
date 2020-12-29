@@ -2,10 +2,10 @@
 // Created by Linux Oid on 28.04.2020.
 //
 
-#include "basefile.h"
-#include <libbencode/bencode.h>
 #include <openssl/sha.h>
 #include <details/utils/utility.hpp>
+#include <libbencode/bencode.hpp>
+#include <libtorrentinfo/basefile.hpp>
 #include <variant>
 
 namespace opentorrent {

@@ -2,12 +2,12 @@
 // Created by Linux Oid on 24.04.2020.
 //
 
-#ifndef COCKTORRENT_BENCODE_ADAPTER_H
-#define COCKTORRENT_BENCODE_ADAPTER_H
+#ifndef OPENTORRENT_BENCODE_ADAPTER_H
+#define OPENTORRENT_BENCODE_ADAPTER_H
 
 #include <exception>
+#include <libbencode/bencode.hpp>
 #include <variant>
-#include <libbencode/bencode.h>
 
 namespace opentorrent::bencode {
 using BencodeCastError = std::bad_variant_access;
@@ -155,4 +155,4 @@ bool BencodeElementAdapter<ElementType>::Contains(
   return dictionary().find(s) != dictionary().end();
 }
 }  // namespace opentorrent::bencode
-#endif  // COCKTORRENT_BENCODE_ADAPTER_H
+#endif  // OPENTORRENT_BENCODE_ADAPTER_H

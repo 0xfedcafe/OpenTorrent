@@ -1,11 +1,11 @@
-#include "bencode.h"
+#include "bencode.hpp"
 
 #include <charconv>
+#include <liblogger/logger.hpp>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <variant>
-#include <liblogger/logger.h>
 
 #define PARSE_EXCEPTION_IF(CONDITION)                                 \
   do {                                                                \

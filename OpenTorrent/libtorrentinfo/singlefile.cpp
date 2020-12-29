@@ -2,7 +2,7 @@
 // Created by Linux Oid on 24.04.2020.
 //
 
-#include <libtorrentinfo/singlefile.h>
+#include <libtorrentinfo/singlefile.hpp>
 
 namespace opentorrent {
 SingleFile::SingleFile(

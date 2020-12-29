@@ -2,12 +2,12 @@
 // Created by Linux Oid on 28.04.2020.
 //
 
-#ifndef COCKTORRENT_MULTIPLEFILE_H
-#define COCKTORRENT_MULTIPLEFILE_H
+#ifndef OPENTORRENT_MULTIPLEFILE_H
+#define OPENTORRENT_MULTIPLEFILE_H
 
-#include <libbencode/bencode-adapter.h>
-#include <libbencode/bencode.h>
-#include <libtorrentinfo/basefile.h>
+#include <libbencode/bencode-adapter.hpp>
+#include <libbencode/bencode.hpp>
+#include <libtorrentinfo/basefile.hpp>
 #include <vector>
 
 namespace opentorrent {
@@ -46,4 +46,4 @@ class MultipleFile : public BaseFile {
 };
 }  // namespace opentorrent
 
-#endif  // COCKTORRENT_MULTIPLEFILE_H
+#endif  // OPENTORRENT_MULTIPLEFILE_H

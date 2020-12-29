@@ -2,10 +2,10 @@
 // Created by Linux Oid on 28.04.2020.
 //
 
-#ifndef COCKTORRENT_BASEFILE_H
-#define COCKTORRENT_BASEFILE_H
+#ifndef OPENTORRENT_BASEFILE_H
+#define OPENTORRENT_BASEFILE_H
 
-#include <libbencode/bencode-adapter.h>
+#include <libbencode/bencode-adapter.hpp>
 #include <vector>
 
 namespace opentorrent {
@@ -62,4 +62,4 @@ class BaseFile {
 };
 }  // namespace opentorrent
 
-#endif  // COCKTORRENT_BASEFILE_H
+#endif  // OPENTORRENT_BASEFILE_H

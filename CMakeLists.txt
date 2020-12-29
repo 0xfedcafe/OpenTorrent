@@ -16,14 +16,14 @@ include_directories(OpenTorrent)
 set(SOURCES OpenTorrent/libbencode/bencode.cpp
             OpenTorrent/liblogger/logger.cpp
             OpenTorrent/libpeer/peerhandshake.cpp
-        OpenTorrent/libtorrentinfo/basefile.cpp
-        OpenTorrent/libtorrentinfo/multiplefile.cpp
-        OpenTorrent/libtorrentinfo/singlefile.cpp
+            OpenTorrent/libtorrentinfo/basefile.cpp
+            OpenTorrent/libtorrentinfo/multiplefile.cpp
+            OpenTorrent/libtorrentinfo/singlefile.cpp
             OpenTorrent/libtracker/connection.cpp
-        OpenTorrent/libtracker/packets/udp/announce.cpp
-        OpenTorrent/libtracker/packets/udp/connect.cpp
-        OpenTorrent/libtracker/packets/udp/response-announce.cpp
-        OpenTorrent/libtracker/packets/udp/response-connect.cpp)
+            OpenTorrent/libtracker/packets/udp/announce.cpp
+            OpenTorrent/libtracker/packets/udp/connect.cpp
+            OpenTorrent/libtracker/packets/udp/response-announce.cpp
+            OpenTorrent/libtracker/packets/udp/response-connect.cpp)
 add_executable(${PROJECT_NAME} "OpenTorrent/open-torrent/main.cpp" ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 

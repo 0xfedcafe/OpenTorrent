@@ -2,8 +2,8 @@
 // Created by prise on 7/2/20.
 //
 
-#ifndef COCKTORRENT_PEERHANDSHAKE_H
-#define COCKTORRENT_PEERHANDSHAKE_H
+#ifndef OPENTORRENT_PEERHANDSHAKE_H
+#define OPENTORRENT_PEERHANDSHAKE_H
 #include <boost/asio.hpp>
 #include <string_view>
 
@@ -30,4 +30,4 @@ class PeerHandshake {
 };
 }  // namespace cocktorrent::peer::tcp
 
-#endif  // COCKTORRENT_PEERHANDSHAKE_H
+#endif  // OPENTORRENT_PEERHANDSHAKE_H

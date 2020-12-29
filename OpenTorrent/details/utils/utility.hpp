@@ -1,9 +1,7 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-#include <liblogger/logger.h>
 #include <algorithm>
-#include <boost/asio.hpp>
 #include <boost/endian/conversion.hpp>
 #include <charconv>
 #include <chrono>
@@ -11,6 +9,7 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <liblogger/logger.hpp>
 #include <random>
 #include <string>
 #include <string_view>
@@ -29,28 +28,6 @@ inline auto CurrentDate() {
   return ::std::put_time(::std::localtime(&tm), "%Y-%m-%d %H:%M:%S");
 }
 
-inline bool IsUdp(::std::string_view url) { return url.find("udp://") == 0; }
-
-inline ::boost::asio::ip::udp::resolver::results_type GetUDPEndPoints(
-    ::std::string_view url, ::boost::asio::io_context &io_context) {
-  std::string_view domain;
-  std::string_view port;
-  if (IsUdp(url)) {
-    url.remove_prefix(sizeof("udp://") - 1);
-    auto start_port = url.find(':');
-    domain = url.substr(0, start_port);
-    auto sv = url.begin() + start_port + 1;
-    auto it = sv;
-    while (std::isdigit(*it)) ++it;
-    port = url.substr(start_port + 1, it - sv);
-  } else {
-    return {};
-  }
-
-  ::boost::asio::ip::udp::resolver resolver{io_context};
-
-  return resolver.resolve(domain, port);
-}
 template <class T, class InputIt>
 ::std::vector<T> ToVector(InputIt b, InputIt e) {
   return ::std::vector<T>{b, e};
@@ -85,12 +62,6 @@ template <class T, typename = EnableIfIntegral<T>>
   ::std::memcpy(chars.chars, &x, sizeof(T));
   return chars;
 }
-template <class T, typename = EnableIfIntegral<T>>
-T FromNetworkCharSequence(::details::utils::CharSequence<sizeof(T)> bytes) {
-  T value;
-  ::std::memcpy(&value, bytes.chars, sizeof(T));
-  return ::details::utils::NetworkToHost(value);
-}
 
 template <class T, typename = EnableIfIntegral<T>>
 T FromNetworkCharSequence(::std::string_view bytes) {
@@ -104,37 +75,6 @@ T FromNetworkCharSequence(::std::string_view bytes) {
                              "FromNetworkCharSequence(std::string_view).");
   ::std::memcpy(&value, bytes.data(), sizeof(T));
   return ::details::utils::NetworkToHost(value);
-}
-
-template <size_t size>
-::std::array<char, size> StringToCharArray(::std::string_view symbols) {
-  if (symbols.size() != size) {
-    ::opentorrent::Logger::get_instance()->Error("Size mismatch");
-    throw ::std::runtime_error{"Size mismatch"};
-  }
-  ::std::array<char, size> to_return{};
-  ::std::copy(symbols.begin(), symbols.end(), to_return.begin());
-  return to_return;
-}
-
-inline void Put(::boost::asio::streambuf &buf, ::std::string_view sv) {
-  buf.sputn(sv.data(), sv.size());
-}
-
-template <class T, typename = EnableIfIntegral<T>>
-void Put(::boost::asio::streambuf &buf, T el) {
-  buf.sputn(::details::utils::ToNetworkCharSequence(el).chars, sizeof(el));
-}
-
-template <size_t N>
-void Put(::boost::asio::streambuf &buf, ::std::array<char, N> ar) {
-  buf.sputn(ar.data(), sizeof(ar));
-}
-
-template <class... T>
-void Put(::boost::asio::streambuf &buf, T &&... els) {
-  [[maybe_unused]] int dummy_arr[sizeof...(T)] = {
-      (::details::utils::Put(buf, ::std::forward<T>(els)), 0)...};
 }
 
 namespace detail {

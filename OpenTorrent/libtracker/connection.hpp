@@ -2,13 +2,13 @@
 // Created by Linux Oid on 26.07.2020.
 //
 
-#ifndef COCKTORRENT_CONNECTION_H
-#define COCKTORRENT_CONNECTION_H
+#ifndef OPENTORRENT_CONNECTION_H
+#define OPENTORRENT_CONNECTION_H
 
-#include <libtracker/packets/udp/announce.h>
-#include <libtracker/packets/udp/connect.h>
-#include <libtracker/packets/udp/response-announce.h>
-#include <libtracker/packets/udp/response-connect.h>
+#include <libtracker/packets/udp/announce.hpp>
+#include <libtracker/packets/udp/connect.hpp>
+#include <libtracker/packets/udp/response-announce.hpp>
+#include <libtracker/packets/udp/response-connect.hpp>
 
 #include <array>
 #include <boost/asio.hpp>
@@ -98,4 +98,4 @@ class Connection {
 };  // namespace opentorrent::udp
 }  // namespace opentorrent::udp
 
-#endif  // COCKTORRENT_CONNECTION_H
+#endif  // OPENTORRENT_CONNECTION_H

@@ -2,12 +2,12 @@
 // Created by Linux Oid on 24.04.2020.
 //
 
-#ifndef COCKTORRENT_SINGLEFILE_H
-#define COCKTORRENT_SINGLEFILE_H
+#ifndef OPENTORRENT_SINGLEFILE_H
+#define OPENTORRENT_SINGLEFILE_H
 
-#include <libbencode/bencode-adapter.h>
-#include <libbencode/bencode.h>
-#include <libtorrentinfo/basefile.h>
+#include <libbencode/bencode-adapter.hpp>
+#include <libbencode/bencode.hpp>
+#include <libtorrentinfo/basefile.hpp>
 
 namespace opentorrent {
 /**
@@ -34,4 +34,4 @@ class SingleFile : public BaseFile {
 };
 }  // namespace opentorrent
 
-#endif  // COCKTORRENT_SINGLEFILE_H
+#endif  // OPENTORRENT_SINGLEFILE_H

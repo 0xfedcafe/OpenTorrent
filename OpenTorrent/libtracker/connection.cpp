@@ -1,10 +1,10 @@
 //
 // Created by Linux Oid on 26.07.2020.
 //
-#include <liblogger/logger.h>
-#include <libtracker/connection.h>
-#include <libtracker/packets/udp/connect.h>
 #include <details/utils/utility.hpp>
+#include <liblogger/logger.hpp>
+#include <libtracker/connection.hpp>
+#include <libtracker/packets/udp/connect.hpp>
 
 void opentorrent::udp::Connection::ConnHandle(
     const opentorrent::udp::Connection::ErrorCode& error_code,

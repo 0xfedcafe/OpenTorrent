@@ -1,7 +1,7 @@
-#include <liblogger/logger.h>
-#include <fstream>
-#include <string>
 #include <details/utils/utility.hpp>
+#include <fstream>
+#include <liblogger/logger.hpp>
+#include <string>
 
 namespace opentorrent {
 Logger *Logger::get_instance() {

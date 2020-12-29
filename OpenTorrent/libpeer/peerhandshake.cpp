@@ -2,8 +2,8 @@
 // Created by prise on 7/2/20.
 //
 
-#include <libpeer/peerhandshake.h>
 #include <details/utils/utility.hpp>
+#include <libpeer/peerhandshake.hpp>
 
 namespace opentorrent::peer::tcp {
 PeerHandshake::PeerHandshake(const std::array<char, 20> &info_hash)

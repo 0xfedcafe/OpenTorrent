@@ -1,10 +1,10 @@
-#include <libbencode/bencode.h>
-#include <libtorrentinfo/basefile.h>
 #include <algorithm>
 #include <catch2/catch.hpp>
-#include <details/utils/utility.hpp>
+#include <details/utils/net/utility.hpp>
 #include <filesystem>
 #include <fstream>
+#include <libbencode/bencode.hpp>
+#include <libtorrentinfo/basefile.hpp>
 
 #define STRINGIFY2(X) #X
 #define STRINGIFY(X) STRINGIFY2(X)
@@ -26,7 +26,7 @@ TEST_CASE("UDP", "[torrent][udp][resolver]") {
         auto decoded = opentorrent::bencode::Decode(bencode_str);
         opentorrent::BaseFile file_info{decoded};
         if (file_info.announce().find("udp://") == 0) {
-          auto vec = details::utils::GetUDPEndPoints(file_info.announce(),
+          auto vec = details::utils::boost::GetUDPEndPoints(file_info.announce(),
                                                         io_service);
           INFO(file_info.announce());
           REQUIRE(!vec.empty());
@@ -34,7 +34,7 @@ TEST_CASE("UDP", "[torrent][udp][resolver]") {
         auto&& ann_list = file_info.announce_list();
         std::for_each(ann_list.begin(), ann_list.end(), [&](auto&& el) {
           if (std::forward<decltype(el)>(el).find("udp://") == 0) {
-            auto vec = details::utils::GetUDPEndPoints(
+            auto vec = details::utils::boost::GetUDPEndPoints(
                 std::forward<decltype(el)>(el), io_service);
             INFO(std::forward<decltype(el)>(el));
             REQUIRE(!vec.empty());

@@ -2,8 +2,8 @@
 // Created by prise on 6/28/20.
 //
 
-#ifndef COCKTORRENT_CONNECT_H
-#define COCKTORRENT_CONNECT_H
+#ifndef OPENTORRENT_CONNECT_H
+#define OPENTORRENT_CONNECT_H
 
 #include <boost/asio.hpp>
 
@@ -25,4 +25,4 @@ class Connect {
   BufferType buffer_{};
 };
 }  // namespace opentorrent::udp
-#endif  // COCKTORRENT_CONNECT_H
+#endif  // OPENTORRENT_CONNECT_H

@@ -1,9 +1,9 @@
 //
 // Created by prise on 6/28/20.
 //
-#include <libbencode/bencode.h>
-#include <libtracker/packets/udp/connect.h>
 #include <details/utils/utility.hpp>
+#include <libbencode/bencode.hpp>
+#include <libtracker/packets/udp/connect.hpp>
 
 namespace opentorrent::packets::udp {
 Connect::Connect() {

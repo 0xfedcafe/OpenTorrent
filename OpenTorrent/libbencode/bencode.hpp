@@ -1,12 +1,12 @@
 #ifndef BENCODE_H
 #define BENCODE_H
 
+#include <liblogger/logger.hpp>
 #include <map>
 #include <string>
 #include <string_view>
 #include <variant>
 #include <vector>
-#include <liblogger/logger.h>
 
 namespace opentorrent::bencode {
 

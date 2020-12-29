@@ -1,11 +1,10 @@
-#include <libbencode/bencode.h>
-#include <liblogger/logger.h>
-#include <libtorrentinfo/multiplefile.h>
-#include <libtracker/connection.h>
 #include <boost/asio.hpp>
 #include <catch2/catch.hpp>
-#include <details/utils/utility.hpp>
-#include <ios>
+#include <details/utils/net/utility.hpp>
+#include <libbencode/bencode.hpp>
+#include <liblogger/logger.hpp>
+#include <libtorrentinfo/multiplefile.hpp>
+#include <libtracker/connection.hpp>
 #include <string>
 
 #define STRINGIFY2(X) #X
@@ -23,19 +22,20 @@ TEST_CASE("Get peers", "[torrent][tracker]") {
   input_file.close();
   boost::asio::io_service io_service;
   boost::asio::ip::udp::socket socket_{io_service};
-  auto endpoints = details::utils::GetUDPEndPoints(s_file_s_info.announce(), io_service);
+  auto endpoints = details::utils::boost::GetUDPEndPoints(
+      s_file_s_info.announce(), io_service);
   auto an_list_it = s_file_s_info.announce_list().begin();
   std::size_t peer_size{};
   while (an_list_it + 1 != s_file_s_info.announce_list().end()) {
-    if (details::utils::IsUdp(*an_list_it))
-      endpoints = details::utils::GetUDPEndPoints(*an_list_it, io_service);
+    if (details::utils::boost::IsUdp(*an_list_it))
+      endpoints =
+          details::utils::boost::GetUDPEndPoints(*an_list_it, io_service);
     ++an_list_it;
 
     if (!endpoints.empty()) {
       Connection::DeadLineTimer deadline{io_service};
       deadline.expires_from_now(boost::asio::chrono::seconds(5));
-      Connection tracker_connection{io_service,
-                                           s_file_s_info.info_hash()};
+      Connection tracker_connection{io_service, s_file_s_info.info_hash()};
       deadline.async_wait(
           [&]([[maybe_unused]] const Connection::ErrorCode &ec) {
             Logger::get_instance()->Error(ec.message());

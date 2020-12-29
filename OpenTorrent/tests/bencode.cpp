@@ -1,9 +1,9 @@
-#include <libbencode/bencode.h>
 #include <algorithm>
 #include <catch2/catch.hpp>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <libbencode/bencode.hpp>
 
 #define STRINGIFY2(X) #X
 #define STRINGIFY(X) STRINGIFY2(X)
