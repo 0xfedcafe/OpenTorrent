@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <libbencode/bencode.hpp>
-#include <libtorrentinfo/basefile.hpp>
+#include <libbittorrent-protocol/torrent-file/basefile.hpp>
 
 #define STRINGIFY2(X) #X
 #define STRINGIFY(X) STRINGIFY2(X)

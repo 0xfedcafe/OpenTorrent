@@ -10,7 +10,7 @@
 #define PARSE_EXCEPTION_IF(CONDITION)                                 \
   do {                                                                \
     if ((CONDITION)) {                                                \
-      Logger::get_instance()->Error("Bencode parsing error occured"); \
+      Logger::instance()->Error("Bencode parsing error occured"); \
       throw std::invalid_argument("Bencode parsing error");           \
     }                                                                 \
   } while (0)

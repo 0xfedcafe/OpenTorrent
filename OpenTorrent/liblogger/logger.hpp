@@ -12,7 +12,7 @@ class Logger {
   std::ofstream file{LOG_FILE_PATH};
 
  public:
-  static Logger *get_instance();
+  static Logger *instance();
 
   void Debug(const std::string &);
 

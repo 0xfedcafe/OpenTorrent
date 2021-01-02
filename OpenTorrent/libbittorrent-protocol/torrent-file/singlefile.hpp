@@ -7,7 +7,7 @@
 
 #include <libbencode/bencode-adapter.hpp>
 #include <libbencode/bencode.hpp>
-#include <libtorrentinfo/basefile.hpp>
+#include <libbittorrent-protocol/torrent-file/basefile.hpp>
 
 namespace opentorrent {
 class SingleFile : public BaseFile {

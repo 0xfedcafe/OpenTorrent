@@ -105,18 +105,41 @@ void Put(char *buf, ::std::array<char, N> ar) {
 
 template <class... T>
 void Put(char *buf, T &&...els) {
-  [[maybe_unused]] int dummy_arr[sizeof...(T)] = {
+  [[maybe_unused]] int dummy_arr[1 + sizeof...(T)] = {
       (::details::utils::detail::Put(buf, ::std::forward<T>(els)),
        buf += sizeof(T), 0)...};
 }
+
+template <class T, typename = EnableIfIntegral<T>>
+T Get(std::string_view &buffer_view) {
+  T tmp = (FromNetworkCharSequence<T>)(buffer_view.substr(0, sizeof(T)));
+  buffer_view.remove_prefix(sizeof(T));
+  return tmp;
+}
+
 }  // namespace detail
 
 template <class... T, size_t N>
 void Put([[maybe_unused]] ::std::array<char, N> &buf,
          [[maybe_unused]] T &&...els) {
-  constexpr size_t all_size = (sizeof(T) + ...);
-  static_assert(N == all_size, "Array size mismatch.");
+  constexpr size_t all_size = (sizeof(T) + ... + 0);
+  static_assert(N >= all_size, "Array size mismatch.");
   ::details::utils::detail::Put(buf.data(), std::forward<T>(els)...);
+}
+
+
+template<class... T>
+auto PackInStdArray(T&&... els) {
+  constexpr size_t all_size = (sizeof(T) + ... + 0);
+  ::std::array<char, all_size> buf;
+
+  ::details::utils::detail::Put(buf.data(), std::forward<T>(els)...);
+  return buf;
+}
+
+template <class... T>
+::std::tuple<T...> Get(std::string_view buffer_view) {
+  return ::std::tuple<T...>((detail::Get<T>)(buffer_view)...);
 }
 
 }  // namespace details::utils

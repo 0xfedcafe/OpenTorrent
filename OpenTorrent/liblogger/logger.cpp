@@ -4,7 +4,7 @@
 #include <string>
 
 namespace opentorrent {
-Logger *Logger::get_instance() {
+Logger *Logger::instance() {
   static Logger logger;
   return &logger;
 }

@@ -5,7 +5,7 @@
 #include <openssl/sha.h>
 #include <details/utils/utility.hpp>
 #include <libbencode/bencode.hpp>
-#include <libtorrentinfo/basefile.hpp>
+#include <libbittorrent-protocol/torrent-file/basefile.hpp>
 #include <variant>
 
 namespace opentorrent {

@@ -2,7 +2,7 @@
 // Created by Linux Oid on 28.04.2020.
 //
 
-#include <libtorrentinfo/multiplefile.hpp>
+#include <libbittorrent-protocol/torrent-file/multiplefile.hpp>
 namespace opentorrent {
 MultipleFile::MultipleFile(const MultipleFile::BencodeElement &el)
     : BaseFile(el),
