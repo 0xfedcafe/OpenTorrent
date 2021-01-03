@@ -17,7 +17,7 @@ class BaseFile {
   using BencodeElement = bencode::BencodeElement;
   using BencodeAdapter = bencode::BencodeElementAdapter<const BencodeElement>;
   using AnnounceList = std::vector<std::string>;
-  using InfoHashType = std::array<char, 20>;
+  using InfoHashType = std::array<int8_t, 20>;
 
   BaseFile() = delete;
 

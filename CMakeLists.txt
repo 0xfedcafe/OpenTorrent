@@ -14,33 +14,32 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 include_directories(OpenTorrent)
 
 set(SOURCES OpenTorrent/libbencode/bencode.cpp
-            OpenTorrent/liblogger/logger.cpp
         OpenTorrent/libbittorrent-protocol/torrent-file/basefile.cpp
         OpenTorrent/libbittorrent-protocol/torrent-file/multiplefile.cpp
         OpenTorrent/libbittorrent-protocol/torrent-file/singlefile.cpp
-        OpenTorrent/libbittorrent-protocol/udp/tracker-peers.hpp
+        OpenTorrent/libbittorrent-protocol/udp/tracker.hpp
         )
 add_executable(${PROJECT_NAME} "OpenTorrent/open-torrent/main.cpp" ${SOURCES} OpenTorrent/libbittorrent-protocol/packets/udp/pack.hpp OpenTorrent/libbittorrent-protocol/constants.hpp)
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 
 set_target_properties(${PROJECT_NAME}
-  PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 
 # Unit testing
 file(GLOB TEST_SOURCES "OpenTorrent/tests/*.cpp")
 set(TEST_SOURCES OpenTorrent/tests/bencode.cpp
-                 OpenTorrent/tests/getudpendpoints.cpp
-        OpenTorrent/libbittorrent-protocol/view.hpp)
+        OpenTorrent/tests/getudpendpoints.cpp
+        OpenTorrent/libbittorrent-protocol/view.hpp OpenTorrent/tests/scrape.cpp OpenTorrent/tests/announce.cpp)
 add_executable(tests ${TEST_SOURCES} OpenTorrent/tests/main.cpp ${SOURCES})
 target_compile_definitions(tests PUBLIC
-  TEST_TORRENT_FILES_PATH=${PROJECT_SOURCE_DIR}/test-torrent-files)
+        TEST_TORRENT_FILES_PATH=${PROJECT_SOURCE_DIR}/test-torrent-files)
 target_link_libraries(tests ${CONAN_LIBS})
 set_target_properties(tests
-  PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/lib"
-  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/lib"
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/bin")
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests/bin")

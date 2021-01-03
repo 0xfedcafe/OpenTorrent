@@ -9,7 +9,6 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <liblogger/logger.hpp>
 #include <random>
 #include <string>
 #include <string_view>
@@ -49,10 +48,8 @@ template <class T, class Cont>
   return ::details::utils::ToVector<T>(b, e);
 }
 
-template <size_t Size>
-struct CharSequence {
-  char chars[Size];
-};
+template<size_t Size>
+using CharSequence = std::array<unsigned char, Size>;
 
 template <class T, typename = EnableIfIntegral<T>>
 [[nodiscard]] T HostToNetwork(T x) noexcept {
@@ -68,7 +65,7 @@ template <class T, typename = EnableIfIntegral<T>>
 [[nodiscard]] ::details::utils::CharSequence<sizeof(T)> ToNetworkCharSequence(T x) {
   ::details::utils::CharSequence<sizeof(T)> chars;
   x = ::details::utils::HostToNetwork(x);
-  ::std::memcpy(chars.chars, &x, sizeof(T));
+  ::std::memcpy(chars.data(), &x, sizeof(T));
   return chars;
 }
 
@@ -94,7 +91,7 @@ inline void Put(char *buf, ::std::string_view sv) {
 
 template <class T, typename = EnableIfIntegral<T>>
 void Put(char *buf, T el) {
-  ::std::memcpy(buf, ::details::utils::ToNetworkCharSequence(el).chars,
+  ::std::memcpy(buf, ::details::utils::ToNetworkCharSequence(el),
                 sizeof(el));
 }
 
@@ -139,7 +136,7 @@ auto PackInStdArray(T&&... els) {
 
 template <class... T>
 ::std::tuple<T...> Get(std::string_view buffer_view) {
-  return ::std::tuple<T...>((detail::Get<T>)(buffer_view)...);
+  return ::std::tuple<T...>{(detail::Get<T>)(buffer_view)...};
 }
 
 }  // namespace details::utils

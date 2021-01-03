@@ -1,16 +1,15 @@
 #include "bencode.hpp"
 
 #include <charconv>
-#include <liblogger/logger.hpp>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <variant>
+#include <stdexcept>
 
 #define PARSE_EXCEPTION_IF(CONDITION)                                 \
   do {                                                                \
     if ((CONDITION)) {                                                \
-      Logger::instance()->Error("Bencode parsing error occured"); \
       throw std::invalid_argument("Bencode parsing error");           \
     }                                                                 \
   } while (0)
