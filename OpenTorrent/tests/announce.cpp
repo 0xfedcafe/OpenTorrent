@@ -16,10 +16,8 @@ TEST_CASE("announce", "[torrent][tracker][udp]") {
   auto res = bencode::Decode(expression);
   MultipleFile file_info{res};
   input_file.close();
-
   boost::asio::io_context io_context;
   udp::Tracker tracker(io_context);
-
   std::string_view udp_announce;
   for (auto&& announce : file_info.announce_list()) {
     if (details::utils::net::IsUdp(file_info.announce())) {

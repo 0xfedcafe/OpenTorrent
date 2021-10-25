@@ -5,10 +5,11 @@
 #ifndef OPENTORRENT_TRACKER_HPP
 #define OPENTORRENT_TRACKER_HPP
 
-#include <boost/asio/ip/udp.hpp>
+#include<boost/asio/ip/udp.hpp>
 #include <boost/asio/spawn.hpp>
 #include <boost/coroutine2/coroutine.hpp>
 #include <chrono>
+#include <optional>
 #include <libbittorrent-protocol/packets/udp/pack.hpp>
 
 namespace opentorrent::udp {

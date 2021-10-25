@@ -4,7 +4,7 @@
 
 #ifndef OPENTORRENT_PACK_HPP
 #define OPENTORRENT_PACK_HPP
-
+#define DEBUG_MODE
 #include <boost/asio/buffer.hpp>
 #include <details/utils/net/utility.hpp>
 #include <libbittorrent-protocol/big-endian.hpp>
@@ -12,7 +12,6 @@
 #include <libbittorrent-protocol/view.hpp>
 #include <string_view>
 #include <type_traits>
-
 namespace opentorrent::packets::udp {
 
 enum class Packet { Connect = 0, Announce, Scrape };
@@ -60,6 +59,7 @@ struct UnpackResponse<Packet::Connect> {
                             decltype(std::declval<Response>().connection_id)>(
             sv);
     const auto [action, transaction_id, connection_id] = tuple;
+
     return Response{action, transaction_id, connection_id};
   }
 };

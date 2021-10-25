@@ -14,6 +14,8 @@
 #include <string_view>
 #include <type_traits>
 #include <vector>
+#include "spdlog/spdlog.h"
+
 
 namespace details::utils {
 template <class T>
@@ -48,7 +50,7 @@ template <class T, class Cont>
   return ::details::utils::ToVector<T>(b, e);
 }
 
-template<size_t Size>
+template <size_t Size>
 using CharSequence = std::array<unsigned char, Size>;
 
 template <class T, typename = EnableIfIntegral<T>>
@@ -62,7 +64,8 @@ template <class T, typename = EnableIfIntegral<T>>
 }
 
 template <class T, typename = EnableIfIntegral<T>>
-[[nodiscard]] ::details::utils::CharSequence<sizeof(T)> ToNetworkCharSequence(T x) {
+[[nodiscard]] ::details::utils::CharSequence<sizeof(T)> ToNetworkCharSequence(
+    T x) {
   ::details::utils::CharSequence<sizeof(T)> chars;
   x = ::details::utils::HostToNetwork(x);
   ::std::memcpy(chars.data(), &x, sizeof(T));
@@ -91,8 +94,7 @@ inline void Put(char *buf, ::std::string_view sv) {
 
 template <class T, typename = EnableIfIntegral<T>>
 void Put(char *buf, T el) {
-  ::std::memcpy(buf, ::details::utils::ToNetworkCharSequence(el),
-                sizeof(el));
+  ::std::memcpy(buf, ::details::utils::ToNetworkCharSequence(el), sizeof(el));
 }
 
 template <size_t N>
@@ -124,9 +126,8 @@ void Put([[maybe_unused]] ::std::array<char, N> &buf,
   ::details::utils::detail::Put(buf.data(), std::forward<T>(els)...);
 }
 
-
-template<class... T>
-auto PackInStdArray(T&&... els) {
+template <class... T>
+auto PackInStdArray(T &&...els) {
   constexpr size_t all_size = (sizeof(T) + ... + 0);
   ::std::array<char, all_size> buf;
 

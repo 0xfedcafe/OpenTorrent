@@ -1,17 +1,17 @@
 #include "bencode.hpp"
 
 #include <charconv>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <variant>
-#include <stdexcept>
 
-#define PARSE_EXCEPTION_IF(CONDITION)                                 \
-  do {                                                                \
-    if ((CONDITION)) {                                                \
-      throw std::invalid_argument("Bencode parsing error");           \
-    }                                                                 \
+#define PARSE_EXCEPTION_IF(CONDITION)                       \
+  do {                                                      \
+    if ((CONDITION)) {                                      \
+      throw std::invalid_argument("Bencode parsing error"); \
+    }                                                       \
   } while (0)
 
 namespace opentorrent::bencode {

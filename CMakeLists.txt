@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project(OpenTorrent)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Werror -Wextra -fsanitize=address,undefined")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O2 -Wall -Wpedantic -Werror -Wextra")
@@ -33,7 +33,8 @@ set_target_properties(${PROJECT_NAME}
 file(GLOB TEST_SOURCES "OpenTorrent/tests/*.cpp")
 set(TEST_SOURCES OpenTorrent/tests/bencode.cpp
         OpenTorrent/tests/getudpendpoints.cpp
-        OpenTorrent/libbittorrent-protocol/view.hpp OpenTorrent/tests/scrape.cpp OpenTorrent/tests/announce.cpp)
+        OpenTorrent/libbittorrent-protocol/view.hpp
+        OpenTorrent/tests/scrape.cpp OpenTorrent/tests/announce.cpp OpenTorrent/libpeerwire-protocol/wire.cpp OpenTorrent/libpeerwire-protocol/wire.h OpenTorrent/libpeerwire-protocol/connection.cpp OpenTorrent/libpeerwire-protocol/connection.h)
 add_executable(tests ${TEST_SOURCES} OpenTorrent/tests/main.cpp ${SOURCES})
 target_compile_definitions(tests PUBLIC
         TEST_TORRENT_FILES_PATH=${PROJECT_SOURCE_DIR}/test-torrent-files)

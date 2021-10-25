@@ -1,8 +1,8 @@
 [requires]
-boost/1.75.0
-catch2/2.13.3
-openssl/1.1.1i
-spdlog/1.8.2
+boost/1.77.0
+catch2/2.13.7
+openssl/3.0.0
+spdlog/1.9.2
 
 [generators]
 cmake
