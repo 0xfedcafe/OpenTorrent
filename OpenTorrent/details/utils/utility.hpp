@@ -1,6 +1,7 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <spdlog/spdlog.h>
 #include <algorithm>
 #include <boost/endian/conversion.hpp>
 #include <charconv>
@@ -14,8 +15,6 @@
 #include <string_view>
 #include <type_traits>
 #include <vector>
-#include "spdlog/spdlog.h"
-
 
 namespace details::utils {
 template <class T>

@@ -9,8 +9,9 @@
 
 TEST_CASE("scrape", "[torrent][tracker][udp]") {
   using namespace opentorrent;
-  std::ifstream input_file(STRINGIFY(TEST_TORRENT_FILES_PATH) "/nsfw2.torrent",
-                           std::ios::binary | std::ifstream::in);
+  std::ifstream input_file(
+      "../../test-torrent-files/kali-linux-2021.4a-installer-amd64.iso.torrent",
+      std::ios::binary | std::ifstream::in);
   std::string expression{std::istreambuf_iterator<char>{input_file},
                          std::istreambuf_iterator<char>{}};
   auto res = bencode::Decode(expression);
@@ -37,9 +38,9 @@ TEST_CASE("scrape", "[torrent][tracker][udp]") {
   boost::asio::spawn(io_context, [&](const boost::asio::yield_context& yield) {
     tracker.AsyncConnect(results, yield);
     auto scrape_info = tracker.Scrape(yield, file_info.info_hash());
-    std::clog << "Completed: " << scrape_info.completed
-              << "\nLeechers: " << scrape_info.leechers
-              << "\nSeeders: " << scrape_info.seeders << std::endl;
+    spdlog::info("Completed: {}\nLeechers: {}\nSeeders: {}\n",
+                 scrape_info.completed, scrape_info.leechers,
+                 scrape_info.seeders);
   });
 
   io_context.run();

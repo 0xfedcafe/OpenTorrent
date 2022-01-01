@@ -36,7 +36,7 @@ TEST_CASE("UDP", "[torrent][udp][resolver]") {
           if (std::forward<decltype(el)>(el).find("udp://") == 0) {
             auto vec = details::utils::net::GetUDPEndPoints(
                 std::forward<decltype(el)>(el), io_service);
-            INFO(std::forward<decltype(el)>(el));
+            // INFO(std::forward<decltype(el)>(el));
             REQUIRE(!vec.empty());
           }
         });

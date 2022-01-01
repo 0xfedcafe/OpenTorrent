@@ -5,9 +5,7 @@
 #ifndef OPENTORRENT_OPENTORRENT_LIBPEERWIRE_PROTOCOL_CONNECTION_H_
 #define OPENTORRENT_OPENTORRENT_LIBPEERWIRE_PROTOCOL_CONNECTION_H_
 
-
 class Connection {
-
   enum class kMessageType {
     kChoke = 0,
     kUnChoke = 1,
@@ -33,8 +31,6 @@ class Connection {
     kPeerInterested = (1UL << 9),
     kConnectionFailed = (1UL << 10)
   };
-
-
 };
 
 #endif  // OPENTORRENT_OPENTORRENT_LIBPEERWIRE_PROTOCOL_CONNECTION_H_

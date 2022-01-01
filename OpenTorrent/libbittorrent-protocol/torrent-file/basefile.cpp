@@ -3,10 +3,12 @@
 //
 
 #include <openssl/sha.h>
+#include <spdlog/spdlog.h>
 #include <details/utils/utility.hpp>
 #include <libbencode/bencode.hpp>
 #include <libbittorrent-protocol/torrent-file/basefile.hpp>
 #include <variant>
+#include "debug.h"
 
 namespace opentorrent {
 BaseFile::BaseFile(const BaseFile::BencodeElement &el)
@@ -38,6 +40,9 @@ BaseFile::BaseFile(const BaseFile::BencodeElement &el)
       if (auto &&el_str = std::get_if<bencode::BencodeString>(&el.data))
         announce_list_.push_back(std::forward<decltype(*el_str)>(*el_str));
     });
+#if DEBUG == 1
+    spdlog::info("Created File with Name: {}\nPieces:", name_, piece_length_);
+#endif
   });
 }
 }  // namespace opentorrent

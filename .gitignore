@@ -138,3 +138,6 @@ fabric.properties
 # Markdown Navigator plugin
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
+
+# clangd language servers cache
+OpenTorrent/.cache/*

@@ -5,12 +5,14 @@
 #ifndef OPENTORRENT_TRACKER_HPP
 #define OPENTORRENT_TRACKER_HPP
 
-#include<boost/asio/ip/udp.hpp>
+#include <spdlog/spdlog.h>
+#include <boost/asio/ip/udp.hpp>
 #include <boost/asio/spawn.hpp>
 #include <boost/coroutine2/coroutine.hpp>
 #include <chrono>
-#include <optional>
 #include <libbittorrent-protocol/packets/udp/pack.hpp>
+#include <optional>
+#include "debug.h"
 
 namespace opentorrent::udp {
 
@@ -106,8 +108,7 @@ class Tracker : boost::noncopyable {
   }
 
   template <class Handler>
-  std::vector<Peer>
-  Announce(Handler &&yield, StaticString<20> info_hash) {
+  std::vector<Peer> Announce(Handler &&yield, StaticString<20> info_hash) {
     auto timer = Timer{sock.get_executor()};
     auto expire_time = Seconds{15};
     std::vector<char> package{};
@@ -122,6 +123,7 @@ class Tracker : boost::noncopyable {
       expire_time *= 2;
       timer.async_wait([&](const boost::system::error_code &error) {
         if (error) {
+          spdlog::info("ERROR: {}", error.to_string());
           return;
         }
         sock.cancel();
@@ -158,16 +160,21 @@ class Tracker : boost::noncopyable {
             UnpackResponse<Packet::Announce>::UnpackPeers(boost::asio::buffer(
                 package.data() + sizeof(resp), package.size() - sizeof(resp)));
         std::vector<Peer> result;
+        std::cout << peers.size();
         result.reserve(peers.size());
         for (auto &p : peers) {
           boost::asio::ip::address_v4 address(
               details::utils::ToNetworkCharSequence(p.ip));
           result.emplace_back(address, p.port);
+
+#if DEBUG == 1
+          spdlog::info("New Peer with IP: {} and Port: {}", address, p.port);
+#endif
         }
         return result;
       }
     }
-
+    spdlog::info("Peer announce failed with exception:");
     throw std::invalid_argument{"Can't scrape from " +
                                 sock.remote_endpoint().address().to_string()};
   }

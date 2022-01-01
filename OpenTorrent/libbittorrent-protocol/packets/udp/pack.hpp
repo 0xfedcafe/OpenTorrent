@@ -5,6 +5,7 @@
 #ifndef OPENTORRENT_PACK_HPP
 #define OPENTORRENT_PACK_HPP
 #define DEBUG_MODE
+#include <fmt/ostream.h>
 #include <boost/asio/buffer.hpp>
 #include <details/utils/net/utility.hpp>
 #include <libbittorrent-protocol/big-endian.hpp>
@@ -127,6 +128,9 @@ struct UnpackResponse<Packet::Announce> {
                             decltype(std::declval<Response>().interval),
                             decltype(std::declval<Response>().leechers),
                             decltype(std::declval<Response>().seeders)>(sv);
+    std::cout << action << ' ' << transaction_id << ' ' << interval << leechers
+              << ' ' << seeders << '\n';
+
     return Response{action, transaction_id, interval, leechers, seeders};
   }
 
@@ -164,6 +168,9 @@ struct PackRequest<Packet::Scrape> {
     Request result{};
     result.connection_id = connection_id;
     result.info_hash = info_hash;
+#ifdef DEBUG
+    spdlog::info("Request processed\nConnection ID: {}\n", connection_id);
+#endif
     return result;
   }
 };

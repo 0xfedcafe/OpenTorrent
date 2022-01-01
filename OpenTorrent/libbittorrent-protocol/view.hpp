@@ -5,6 +5,9 @@
 #ifndef OPENTORRENT_VIEW_HPP
 #define OPENTORRENT_VIEW_HPP
 
+#include <array>
+#include <cstddef>
+#include <cstdint>
 namespace opentorrent {
 template <size_t N>
 struct View {
