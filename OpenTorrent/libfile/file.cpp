@@ -4,7 +4,7 @@
 #include <cstring>
 #include <iostream>
 
-#ifdef unix || __APPLE__
+#if defined unix || defined __APPLE__
 #include <fcntl.h>  // O_RDONLY
 #include <sys/stat.h>
 #include <unistd.h>  // read
