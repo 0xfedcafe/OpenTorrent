@@ -25,6 +25,15 @@ namespace opentorrent {
   return peer_id;
 }();
 
+inline const StaticString<19> pstr{'B', 'i', 't', 'T', 'o', 'r', 'r',
+                                   'e', 'n', 't', ' ', 'p', 'r', 'o',
+                                   't', 'o', 'c', 'o', 'l'};
+// dunno how to delete \n in "str"
+// In version 1.0 of the BitTorrent protocol,
+// pstrlen = 19,
+// and pstr = "BitTorrent protocol".
+inline const char pstrlen = 19;  // length of pstr
+
 }  // namespace opentorrent
 
 #endif  // OPENTORRENT_CONSTANTS_HPP

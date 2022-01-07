@@ -35,7 +35,14 @@ file(GLOB TEST_SOURCES "OpenTorrent/tests/*.cpp")
 set(TEST_SOURCES OpenTorrent/tests/bencode.cpp
         OpenTorrent/tests/getudpendpoints.cpp
         OpenTorrent/libbittorrent-protocol/view.hpp
-        OpenTorrent/tests/scrape.cpp OpenTorrent/tests/announce.cpp OpenTorrent/libpeerwire-protocol/wire.cpp OpenTorrent/libpeerwire-protocol/wire.h OpenTorrent/libpeerwire-protocol/connection.cpp OpenTorrent/libpeerwire-protocol/connection.h)
+        OpenTorrent/tests/scrape.cpp OpenTorrent/tests/announce.cpp
+        OpenTorrent/libpeerwire-protocol/wire.cpp
+        OpenTorrent/libpeerwire-protocol/wire.hpp
+        OpenTorrent/libpeerwire-protocol/connection.cpp
+        OpenTorrent/libpeerwire-protocol/connection.hpp
+        OpenTorrent/libpeerwire-protocol/peer.cpp
+        OpenTorrent/libpeerwire-protocol/peer.hpp
+        )
 add_executable(tests ${TEST_SOURCES} OpenTorrent/tests/main.cpp ${SOURCES})
 target_compile_definitions(tests PUBLIC
         TEST_TORRENT_FILES_PATH=${PROJECT_SOURCE_DIR}/test-torrent-files

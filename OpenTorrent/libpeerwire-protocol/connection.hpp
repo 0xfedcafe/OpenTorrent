@@ -6,10 +6,11 @@
 #define OPENTORRENT_OPENTORRENT_LIBPEERWIRE_PROTOCOL_CONNECTION_H_
 
 class Connection {
-  enum class kMessageType {
+ public:
+  enum kMessageType {
     kChoke = 0,
     kUnChoke = 1,
-    kInterested = 1,
+    kInterested = 2,
     kNotInterested = 3,
     kHave = 4,
     kBitField = 5,
@@ -18,7 +19,7 @@ class Connection {
     kCancel = 8,
     kPort = 9
   };
-  enum class kConnectionState {
+  enum kConnectionState {
     kHandshakeSent = (1UL << 0),
     kHandshakeReceived = (1UL << 1),
     kDisconnected = (1UL << 2),

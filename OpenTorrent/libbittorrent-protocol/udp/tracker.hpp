@@ -167,7 +167,7 @@ class Tracker : boost::noncopyable {
               details::utils::ToNetworkCharSequence(p.ip));
           result.emplace_back(address, p.port);
 
-#if DEBUG == 1
+#ifdef DEBUG
           spdlog::info("New Peer with IP: {} and Port: {}", address, p.port);
 #endif
         }

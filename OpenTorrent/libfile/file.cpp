@@ -1,9 +1,12 @@
 #include "file.hpp"
 
+#include <spdlog/spdlog.h>
 #include <algorithm>
 #include <cstring>
+#include <exception>
 #include <iostream>
-
+#include <stdexcept>
+#include "debug.h"
 #if defined unix || defined __APPLE__
 #include <fcntl.h>  // O_RDONLY
 #include <sys/stat.h>
@@ -13,9 +16,14 @@
 void opentorrent::input::File::ReadFile() {
   static const auto BUFFER_SIZE = 16 * 1024;
   int fd = open(path_.c_str(), O_RDONLY);
-  if (fd == -1)  // should throw here
-    /* Advise the kernel of our access pattern.  */
-    posix_fadvise(fd, 0, 0, 1);  // FDADVICE_SEQUENTIAL
+  if (fd == -1) {  // should throw here
+#ifdef DEBUG
+    spdlog::info("Can't open file {}. Check Permissions\n", path_);
+#endif
+    throw std::runtime_error("Check Permissions");
+  }
+  /* Advise the kernel of our access pattern.  */
+  posix_fadvise(fd, 0, 0, 1);  // FDADVICE_SEQUENTIAL
   struct stat st;
   fstat(fd, &st);
   data_.resize(st.st_size);
@@ -23,15 +31,23 @@ void opentorrent::input::File::ReadFile() {
   char buf[BUFFER_SIZE + 1];
 
   int i = -1;
-  while (size_t bytes_read = read(fd, buf, BUFFER_SIZE) && i++) {
-    if (bytes_read == (size_t)-1)  // throw "read failed"
-      if (!bytes_read) break;
+  while (ssize_t bytes_read = read(fd, buf, BUFFER_SIZE) && i++) {
+    if (bytes_read == -1) {  // throw "read failed"
+      if (!bytes_read) {
+#ifdef DEBUG
+        spdlog::info("Can't read file {}\n", path_);
+#endif
+        data_.clear();
+        throw std::runtime_error("Read Failure");
+        break;
+      }
+    }
     std::copy(buf, buf + BUFFER_SIZE, data_.begin() + i * BUFFER_SIZE);
   }
 }
 #endif
 
-#ifdef __WIN32
+#if defined __WIN32 || defined __CYGWIN__
 
 #include <windows.h>
 // Cygwin defines the unix symbols and doesn't define the win32 ones,
@@ -53,7 +69,10 @@ void opentorrent::input::File::ReadFile() {
   data_.resize(data_size);
 
   if (hFile == INVALID_HANDLE_VALUE) {
-    // throw an error here
+#ifdef DEBUG
+    spdlog::info("Wrong Handle Value\n", path_);
+#endif
+    throw std::runtime_error("failed to open file");
   }
 
   int i = -1;
@@ -63,7 +82,10 @@ void opentorrent::input::File::ReadFile() {
     }
   }
   if (CloseHandle(hFile)) {
-    // handle error
+#ifdef DEBUG
+    spdlog::info("Can't close file\n", path_);
+#endif
+    throw std::runtime_error("failed to close file");
   }
 }
 

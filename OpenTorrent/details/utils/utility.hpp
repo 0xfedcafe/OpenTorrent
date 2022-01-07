@@ -93,11 +93,12 @@ inline void Put(char *buf, ::std::string_view sv) {
 
 template <class T, typename = EnableIfIntegral<T>>
 void Put(char *buf, T el) {
-  ::std::memcpy(buf, ::details::utils::ToNetworkCharSequence(el), sizeof(el));
+  ::std::memcpy(buf, ::details::utils::ToNetworkCharSequence(el).data(),
+                sizeof(el));
 }
 
 template <size_t N>
-void Put(char *buf, ::std::array<char, N> ar) {
+void Put(char *buf, ::std::array<int8_t, N> ar) {
   ::std::memcpy(buf, ar.data(), sizeof(ar));
 }
 
@@ -118,7 +119,7 @@ T Get(std::string_view &buffer_view) {
 }  // namespace detail
 
 template <class... T, size_t N>
-void Put([[maybe_unused]] ::std::array<char, N> &buf,
+void Put([[maybe_unused]] ::std::array<int8_t, N> &buf,
          [[maybe_unused]] T &&...els) {
   constexpr size_t all_size = (sizeof(T) + ... + 0);
   static_assert(N >= all_size, "Array size mismatch.");
